@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แบบสำรวจนักศึกษาใหม่ ราชวิทยาลัยจุฬาภรณ์ 2569</title>
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
@@ -52,7 +51,7 @@
     .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(242, 107, 33, 0.4); }
 
     /* -------------------------------------
-       Custom Input (School & Textareas)
+       Custom Input & Select
        ------------------------------------- */
     .group-input { display: flex; align-items: center; position: relative; width: 100%; height: 48px;}
     .input-custom {
@@ -67,9 +66,6 @@
     .icon-input { position: absolute; left: 1rem; color: #94a3b8; pointer-events: none;}
     textarea.input-custom { height: auto; padding-top: 0.75rem; }
 
-    /* -------------------------------------
-       Custom Dropdown (Dek-D Style with Icons)
-       ------------------------------------- */
     .custom-select-wrapper { position: relative; width: 100%; user-select: none; }
     .custom-select-trigger {
       width: 100%; height: 48px; padding: 0 1rem; border: 2px solid transparent; border-radius: 10px;
@@ -99,11 +95,9 @@
     .custom-option:hover, #schoolDropdown li:hover, #provinceDropdown li:hover { background-color: #fff8f0; color: #f26b21; }
     .custom-option.selected { background-color: #fff8f0; color: #f26b21; font-weight: 700; }
     
-    /* Dropdown Icon Circle */
     .opt-icon-box { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #f0f7ff; color: #003380; transition: 0.2s;}
     .custom-option:hover .opt-icon-box, .custom-option.selected .opt-icon-box { background-color: #f26b21; color: white; }
 
-    /* Custom Scrollbar */
     .custom-options::-webkit-scrollbar, #schoolDropdown::-webkit-scrollbar, #provinceDropdown::-webkit-scrollbar { width: 6px; }
     .custom-options::-webkit-scrollbar-thumb, #schoolDropdown::-webkit-scrollbar-thumb, #provinceDropdown::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
 
@@ -119,9 +113,6 @@
     .check-text { font-size: 0.9rem; font-weight: 500; color: #475569; line-height: 1.4; padding-top: 0.2rem;}
     .check-card.active .check-text { color: #f26b21; font-weight: 700; }
 
-    /* -------------------------------------
-       Checkbox Animation (Splash-12 Circular)
-       ------------------------------------- */
     .checkbox-wrapper-12 { position: relative; flex-shrink: 0; padding-top: 2px;}
     .checkbox-wrapper-12 * { box-sizing: border-box; }
     .checkbox-wrapper-12 input[type="checkbox"], .checkbox-wrapper-12 input[type="radio"] { 
@@ -142,40 +133,23 @@
       100% { background: #f26b21; box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent, 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent; border-color: #f26b21; }
     }
 
-    /* Steps & Loader */
+    /* Steps & Animations */
     .step-section { display: none; animation: fadeIn 0.4s ease-out forwards; }
     .step-section.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
     
+    .animate-popIn { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
     .loader {
-      width: 24px;
-      height: 24px;
-      position: relative;
-      display: inline-block;
-      vertical-align: middle;
+      width: 24px; height: 24px; position: relative; display: inline-block; vertical-align: middle;
     }
     .loader:before {
-      content: '';
-      width: 24px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.4);
-      position: absolute;
-      top: 32px;
-      left: 0;
-      border-radius: 50%;
-      animation: shadow324 0.5s linear infinite;
+      content: ''; width: 24px; height: 4px; background: rgba(255, 255, 255, 0.4); position: absolute; top: 32px; left: 0; border-radius: 50%; animation: shadow324 0.5s linear infinite;
     }
     .loader:after {
-      content: '';
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      position: absolute;
-      top: 0;
-      left: 0;
-      border-radius: 3px;
-      animation: jump7456 0.5s linear infinite;
+      content: ''; width: 100%; height: 100%; background: #ffffff; position: absolute; top: 0; left: 0; border-radius: 3px; animation: jump7456 0.5s linear infinite;
     }
     @keyframes jump7456 {
       15% { border-bottom-right-radius: 2px; }
@@ -184,21 +158,7 @@
       75% { transform: translateY(6px) rotate(67.5deg); }
       100% { transform: translateY(0) rotate(90deg); }
     }
-    @keyframes shadow324 {
-      0%, 100% { transform: scale(1, 1); }
-      50% { transform: scale(1.2, 1); }
-    }
-
-    /* -------------------------------------
-       Pop-up Bouncy Animation
-       ------------------------------------- */
-    @keyframes popInBouncy {
-        0% { opacity: 0; transform: scale(0.5) translateY(50px); }
-        60% { opacity: 1; transform: scale(1.05) translateY(-10px); }
-        80% { opacity: 1; transform: scale(0.95) translateY(5px); }
-        100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .animate-popIn { animation: popInBouncy 0.6s cubic-bezier(0.68, -0.55, 0.26, 1.55) forwards; }
+    @keyframes shadow324 { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.2, 1); } }
   </style>
 </head>
 <body class="text-gray-800">
@@ -287,7 +247,6 @@
                           </label>
                       </div>
 
-                      <!-- PIN CONTAINER (Responsive 7 boxes on one row for mobile) -->
                       <div class="flex flex-nowrap items-center justify-start gap-1 sm:gap-2 w-full overflow-hidden" id="pinContainer">
                           <!-- Group 1: 4 digits -->
                           <div class="flex gap-1 sm:gap-2 shrink-0">
@@ -434,51 +393,38 @@
               <p class="text-gray-500 mb-6 max-w-md text-sm md:text-base leading-relaxed">ข้อมูลของท่านถูกส่งเข้าระบบเรียบร้อยแล้ว<br>ใช้นิ้วถูที่การ์ดด้านล่างเพื่อลุ้นรับของรางวัล!</p>
               
               <!-- Scratch Card Area -->
-              <div id="scratchContainer" class="relative w-full max-w-[320px] md:max-w-[360px] aspect-[2/1] mx-auto mb-6 select-none overflow-hidden rounded-2xl shadow-lg border-2 border-gray-200 touch-none bg-white">
-                  <!-- Result Background -->
-                  <div id="scratchResultBg" class="absolute inset-0 flex flex-col items-center justify-center p-4">
-                      <!-- JS จะแทรกข้อความหรือรูปภาพรางวัลตรงนี้ -->
-                  </div>
+              <div id="scratchContainer" class="relative w-full max-w-[320px] md:max-w-[360px] aspect-[2/1] mx-auto mb-8 select-none overflow-hidden rounded-2xl shadow-lg border-2 border-gray-200 touch-none bg-white">
+                  <!-- Result Background (จะถูกตั้งค่าผ่าน JS) -->
+                  <div id="scratchResultBg" class="absolute inset-0 flex flex-col items-center justify-center p-4"></div>
                   <!-- Canvas สำหรับขูด -->
-                  <canvas id="scratchCanvas" class="absolute inset-0 z-10 cursor-crosshair w-full h-full transition-opacity duration-500"></canvas>
+                  <canvas id="scratchCanvas" class="absolute inset-0 z-10 cursor-crosshair"></canvas>
               </div>
-
-              <button onclick="goToMedia()" class="btn-orange px-8 md:px-10 py-3.5 md:py-4 rounded-xl font-bold transition shadow-lg text-base md:text-lg flex items-center gap-2 mt-4">ติดตามข่าวสารของเรา <i class="fi fi-rr-arrow-up-right-from-square mt-1"></i></button>
+              
+              <button onclick="goToMedia()" class="btn-orange px-8 md:px-10 py-3.5 md:py-4 rounded-xl font-bold transition shadow-lg text-base md:text-lg flex items-center gap-2 mt-2">ติดตามข่าวสารของเรา <i class="fi fi-rr-arrow-up-right-from-square mt-1"></i></button>
           </div>
       </div>
   </div>
 
   <!-- ==========================================
-       WIN PRIZE MODAL (Pop-up ดุ๊กดิ๊ก)
+       Win Modal (Pop-up ดุ๊กดิ๊ก)
        ========================================== -->
-  <div id="winModal" class="fixed inset-0 z-[300] hidden items-center justify-center p-4 bg-[#001133]/80 backdrop-blur-sm transition-opacity duration-300 opacity-0">
-      <div class="bg-white w-full max-w-sm md:max-w-md rounded-[2rem] p-6 md:p-8 text-center shadow-2xl relative border-4 border-[#22c55e]">
-          <!-- Icon Header -->
-          <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto -mt-16 mb-4 border-4 border-white shadow-lg">
-              <i class="fi fi-sr-gift text-5xl text-green-500 mt-2"></i>
-          </div>
-          
-          <h3 class="text-3xl font-black text-green-600 mb-2">ยินดีด้วย!</h3>
-          <p class="text-lg font-bold text-[#003380] mb-2">คุณได้รับรางวัล</p>
-          
-          <!-- Name Display -->
-          <div class="bg-orange-50 border border-orange-100 rounded-xl py-3 px-4 mb-4 shadow-inner">
-              <p id="winnerNameDisplay" class="text-lg md:text-xl text-[#f26b21] font-black truncate"></p>
-          </div>
-          
-          <p class="text-sm md:text-base text-gray-600 mb-6 font-medium leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-100">
-              โปรดแคปหน้าจอนี้<br>หรือแสดงหลักฐานให้ทางเจ้าหน้าที่ที่บูธดู
-          </p>
-
-          <!-- Claim Button -->
-          <div id="modalClaimContainer" class="w-full">
-              <button onclick="claimPrizeBtn()" id="btnModalClaim" class="w-full bg-[#22c55e] hover:bg-green-600 text-white px-6 py-4 rounded-xl font-black transition shadow-lg flex items-center justify-center gap-2 text-lg">
-                  <i class="fi fi-sr-hand-holding-box mt-1"></i> กดรับสิทธิ์ (เจ้าหน้าที่เท่านั้น)
+  <div id="winModal" class="fixed inset-0 z-[300] bg-black/60 hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+      <div class="bg-white w-full max-w-sm rounded-[24px] p-8 text-center shadow-2xl transform scale-95 transition-transform duration-300" id="winModalBox">
+          <div id="winModalContent">
+              <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                  <i class="fi fi-sr-gift text-4xl text-green-500 mt-2"></i>
+              </div>
+              <h3 class="text-2xl font-black text-green-600 mb-2">ยินดีด้วย! คุณได้รับรางวัล</h3>
+              <p class="text-gray-600 font-bold mb-1">(<span id="winFullName" class="text-green-600"></span>)</p>
+              <p class="text-gray-500 text-sm mb-6 leading-relaxed">โปรดแคปหน้าจอหรือแสดงหน้านี้ให้ทางเจ้าหน้าที่ที่บูธดู</p>
+              
+              <button onclick="claimPrizeBtn()" id="btnClaim" class="w-full bg-[#22c55e] hover:bg-green-600 text-white px-6 py-4 rounded-xl font-bold transition shadow-md flex items-center justify-center gap-2 mb-2 text-lg">
+                  <i class="fi fi-sr-gift mt-1"></i> กดใช้สิทธิ์รับรางวัล
               </button>
-              <p class="text-xs text-red-500 mt-3 font-bold">*กรุณากดเมื่ออยู่ต่อหน้าเจ้าหน้าที่เท่านั้น</p>
+              <p class="text-xs text-red-500 font-bold">*สำหรับเจ้าหน้าที่กดยืนยันเท่านั้น</p>
+              
+              <button onclick="closeWinModal()" class="mt-5 text-gray-400 hover:text-gray-600 text-sm font-medium underline">ปิดหน้าต่างไว้ก่อน</button>
           </div>
-          
-          <button onclick="closeWinModal()" class="mt-6 text-gray-400 hover:text-gray-600 text-sm underline font-medium">ปิดหน้าต่างนี้เพื่อดูการ์ด</button>
       </div>
   </div>
 
@@ -490,17 +436,8 @@ let rawSchoolData = [];
 
 const provincesList = ["กรุงเทพมหานคร","กระบี่","กาญจนบุรี","กาฬสินธุ์","กำแพงเพชร","ขอนแก่น","จันทบุรี","ฉะเชิงเทรา","ชลบุรี","ชัยนาท","ชัยภูมิ","ชุมพร","เชียงราย","เชียงใหม่","ตรัง","ตราด","ตาก","นครนายก","นครปฐม","นครพนม","นครราชสีมา","นครศรีธรรมราช","นครสวรรค์","นนทบุรี","นราธิวาส","น่าน","บึงกาฬ","บุรีรัมย์","ปทุมธานี","ประจวบคีรีขันธ์","ปราจีนบุรี","ปัตตานี","พระนครศรีอยุธยา","พะเยา","พังงา","พัทลุง","พิจิตร","พิษณุโลก","เพชรบุรี","เพชรบูรณ์","แพร่","ภูเก็ต","มหาสารคาม","มุกดาหาร","แม่ฮ่องสอน","ยโสธร","ยะลา","ร้อยเอ็ด","ระนอง","ระยอง","ราชบุรี","ลพบุรี","ลำปาง","ลำพูน","เลย","ศรีสะเกษ","สกลนคร","สงขลา","สตูล","สมุทรปราการ","สมุทรสงคราม","สมุทรสาคร","สระแก้ว","สระบุรี","สิงห์บุรี","สุโขทัย","สุพรรณบุรี","สุราษฎร์ธานี","สุรินทร์","หนองคาย","หนองบัวลำภู","อ่างทอง","อำนาจเจริญ","อุดรธานี","อุตรดิตถ์","อุทัยธานี","อุบลราชธานี"];
 
-// --- Data Sources with Icons ---
-const prefixData = [
-    { name: "นาย", icon: "fi-rr-user" }, 
-    { name: "นางสาว", icon: "fi-rr-user" }
-];
-const platformData = [
-    { name: "Facebook", icon: "fi-brands-facebook" }, 
-    { name: "Instagram", icon: "fi-brands-instagram" }, 
-    { name: "TikTok", icon: "fi-brands-tik-tok" }, 
-    { name: "X (Twitter)", icon: "fi-brands-twitter" }
-];
+const prefixData = [ { name: "นาย", icon: "fi-rr-user" }, { name: "นางสาว", icon: "fi-rr-user" } ];
+const platformData = [ { name: "Facebook", icon: "fi-brands-facebook" }, { name: "Instagram", icon: "fi-brands-instagram" }, { name: "TikTok", icon: "fi-brands-tik-tok" }, { name: "X (Twitter)", icon: "fi-brands-twitter" } ];
 const courseData = [
     { name: "แพทยศาสตรบัณฑิต", prefix: "7008", icon: "fi-sr-stethoscope" },
     { name: "วท.บ. สาขาวิชาวิทยาศาสตร์ข้อมูลสุขภาพ", prefix: "7005", icon: "fi-sr-chart-histogram" },
@@ -514,30 +451,16 @@ const courseData = [
     { name: "วท.บ. สาขาวิชาเทคโนโลยีอาหารทางการแพทย์และสุขภาพ", prefix: "7027", icon: "fi-sr-restaurant" },
     { name: "วศ.บ. สาขาวิชาวิศวกรรมชีวการแพทย์", prefix: "7028", icon: "fi-sr-settings" }
 ];
-const tcasData = [
-    { name: "รอบที่ 1 Portfolio", icon: "fi-sr-folder" }, 
-    { name: "รอบที่ 2 Quota", icon: "fi-sr-document" }, 
-    { name: "รอบที่ 3 Admission", icon: "fi-sr-graduation-cap" }, 
-    { name: "รอบ 4 Direct Admission", icon: "fi-sr-briefcase" }
-];
-
+const tcasData = [ { name: "รอบที่ 1 Portfolio", icon: "fi-sr-folder" }, { name: "รอบที่ 2 Quota", icon: "fi-sr-document" }, { name: "รอบที่ 3 Admission", icon: "fi-sr-graduation-cap" }, { name: "รอบ 4 Direct Admission", icon: "fi-sr-briefcase" } ];
 const reasonsList = ["ชื่อเสียงและความน่าเชื่อถือของสถาบัน", "หลักสูตรทันสมัย ตอบโจทย์ตลาดแรงงาน", "หลักสูตรมีความโดดเด่นและมีรายวิชาเข้มข้นเฉพาะทาง", "ต้องการทำงานด้านวิทยาศาสตร์สุขภาพ", "สถาบันมีจุดเด่นในด้านการวิจัย และนวัตกรรม", "มีทุนการศึกษาสนับสนุน", "มีสิ่งแวดล้อม และบรรยากาศดี", "สถานที่ตั้งอยู่ในพื้นที่สะดวกต่อการเดินทาง", "ได้รับคำแนะนำจากครอบครัว / เพื่อน / ครู"];
 const channelsList = ["กิจกรรม CRA Open House", "กิจกรรม CRA Roadshow ตามโรงเรียน", "กิจกรรม CRA The Tutor", "กิจกรรมทางการศึกษาราชวิทยาลัยจุฬาภรณ์", "งาน DEK-D's TCAS Fair ไบเทค บางนา", "เพจราชวิทยาลัยจุฬาภรณ์ และ EducationCRA", "เว็บไซต์ www.cra.ac.th", "เว็บไซต์ TCAS", "สื่อสังคมออนไลน์ และเว็บไซต์ข่าว", "โทรทัศน์ / หนังสือพิมพ์ / โปสเตอร์", "ผู้ปกครอง เพื่อนและครู"];
 
 window.onload = function() {
-    console.log("กำลังดึงข้อมูลโรงเรียน...");
     fetch(API_URL + "?action=getSchoolData")
         .then(response => response.json())
-        .then(data => {
-            rawSchoolData = data;
-            console.log("ดึงข้อมูลสำเร็จ จำนวนโรงเรียน:", rawSchoolData.length);
-        })
+        .then(data => { rawSchoolData = data; })
         .catch(error => {
-            console.error("Error loading school data:", error);
-            Swal.fire({
-                toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
-                icon: 'error', title: 'ดึงข้อมูลโรงเรียนไม่สำเร็จ กรุณารีเฟรชหน้าเว็บ'
-            });
+            Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, icon: 'error', title: 'ดึงข้อมูลโรงเรียนไม่สำเร็จ กรุณารีเฟรชหน้าเว็บ' });
         });
 
     document.getElementById('reasonGroup').innerHTML = buildCheckCards(reasonsList, 'chkReason', 'wrapOtherReason', 'otherReason');
@@ -604,18 +527,13 @@ function buildCustomDropdownWithIcon(containerId, hiddenInputId, dataArray, plac
     const container = document.getElementById(containerId);
     const hiddenInput = document.getElementById(hiddenInputId);
     
-    let wrapper = document.createElement('div');
-    wrapper.className = "custom-select-wrapper";
-    
-    let trigger = document.createElement('div');
-    trigger.className = "custom-select-trigger";
+    let wrapper = document.createElement('div'); wrapper.className = "custom-select-wrapper";
+    let trigger = document.createElement('div'); trigger.className = "custom-select-trigger";
     trigger.innerHTML = '<span class="truncate text-gray-500">' + placeholder + '</span><i class="fi fi-rr-angle-small-down text-gray-400"></i>';
     
-    let optionsList = document.createElement('div');
-    optionsList.className = "custom-options";
+    let optionsList = document.createElement('div'); optionsList.className = "custom-options";
     
-    let defOpt = document.createElement('div');
-    defOpt.className = "custom-option";
+    let defOpt = document.createElement('div'); defOpt.className = "custom-option";
     defOpt.innerHTML = '<div class="opt-icon-box shrink-0"><i class="fi fi-rr-cross-circle mt-1"></i></div><span class="truncate text-gray-400">' + placeholder + '</span>';
     defOpt.onclick = function(e) {
         e.stopPropagation(); hiddenInput.value = "";
@@ -628,22 +546,17 @@ function buildCustomDropdownWithIcon(containerId, hiddenInputId, dataArray, plac
 
     for (let i = 0; i < dataArray.length; i++) {
         let item = dataArray[i];
-        let opt = document.createElement('div');
-        opt.className = "custom-option";
+        let opt = document.createElement('div'); opt.className = "custom-option";
         opt.innerHTML = '<div class="opt-icon-box shrink-0"><i class="fi ' + item.icon + ' mt-1"></i></div><span class="truncate">' + item.name + '</span>';
         opt.setAttribute('data-value', item.name);
         if(item.prefix) opt.setAttribute('data-prefix', item.prefix);
         
         opt.onclick = function(e) {
             e.stopPropagation();
-            let val = this.getAttribute('data-value');
-            let prefix = this.getAttribute('data-prefix');
+            let val = this.getAttribute('data-value'); let prefix = this.getAttribute('data-prefix');
             hiddenInput.value = val;
-            
             trigger.innerHTML = '<div class="flex items-center gap-3 overflow-hidden w-full">' + this.innerHTML + '</div><i class="fi fi-rr-angle-small-down text-gray-400 ml-auto shrink-0"></i>';
-            
             trigger.classList.add('active-trigger'); wrapper.classList.remove('open');
-            
             optionsList.querySelectorAll('.custom-option').forEach(el => el.classList.remove('selected'));
             this.classList.add('selected');
             if(onChangeCallback) onChangeCallback(val, prefix);
@@ -654,12 +567,8 @@ function buildCustomDropdownWithIcon(containerId, hiddenInputId, dataArray, plac
     trigger.onclick = function(e) {
         e.stopPropagation();
         document.querySelectorAll('.custom-select-wrapper').forEach(w => { if(w !== wrapper) w.classList.remove('open'); });
-        
-        let schDropdown = document.getElementById('schoolDropdown');
-        if (schDropdown) schDropdown.classList.remove('show');
-        let provDropdown = document.getElementById('provinceDropdown');
-        if (provDropdown) provDropdown.classList.remove('show');
-
+        let schDropdown = document.getElementById('schoolDropdown'); if (schDropdown) schDropdown.classList.remove('show');
+        let provDropdown = document.getElementById('provinceDropdown'); if (provDropdown) provDropdown.classList.remove('show');
         wrapper.classList.toggle('open');
     };
     
@@ -668,10 +577,8 @@ function buildCustomDropdownWithIcon(containerId, hiddenInputId, dataArray, plac
     
 document.addEventListener('click', function() {
     document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
-    let schDropdown = document.getElementById('schoolDropdown');
-    if (schDropdown) schDropdown.classList.remove('show');
-    let provDropdown = document.getElementById('provinceDropdown');
-    if (provDropdown) provDropdown.classList.remove('show');
+    let schDropdown = document.getElementById('schoolDropdown'); if (schDropdown) schDropdown.classList.remove('show');
+    let provDropdown = document.getElementById('provinceDropdown'); if (provDropdown) provDropdown.classList.remove('show');
 });
 
 let currentCoursePrefix = "";
@@ -703,13 +610,11 @@ function toggleUnknownStudentId() {
     else chk.closest('label').classList.replace('border-[#f26b21]', 'border-orange-200');
     
     if (isUnknown) {
-        suffixWrapper.style.display = 'none'; 
-        unknownText.style.display = 'block';
+        suffixWrapper.style.display = 'none'; unknownText.style.display = 'block';
         unknownText.classList.replace('hidden','block');
         suffixBoxes.forEach(b => b.value = "");
     } else {
-        suffixWrapper.style.display = 'flex'; 
-        unknownText.style.display = 'none';
+        suffixWrapper.style.display = 'flex'; unknownText.style.display = 'none';
         unknownText.classList.replace('block','hidden');
         if (currentCoursePrefix) suffixBoxes[0].focus();
     }
@@ -733,9 +638,7 @@ function fastSearchSchool(val) {
                 e.stopPropagation(); let schInput = document.getElementById('schoolInputSearch');
                 schInput.value = results[j][0];
                 schInput.style.borderColor = 'rgba(0, 51, 128, 0.4)'; schInput.style.backgroundColor = '#fff';
-                
-                let p = document.getElementById('provinceInput');
-                p.value = results[j][1];
+                let p = document.getElementById('provinceInput'); p.value = results[j][1];
                 box.classList.remove('show');
             };
             box.appendChild(li);
@@ -745,9 +648,7 @@ function fastSearchSchool(val) {
         li.innerHTML = '<div class="text-center w-full py-2"><span class="text-gray-500 text-sm">ไม่พบชื่อโรงเรียนนี้</span><br><span class="text-xs text-[#f26b21] mt-1 inline-block">พิมพ์ชื่อใหม่ลงไปได้เลยครับ</span></div>';
         li.onclick = function(e) { 
             e.stopPropagation(); box.classList.remove('show'); 
-            let p = document.getElementById('provinceInput');
-            p.focus(); 
-            fastSearchProvince(p.value);
+            let p = document.getElementById('provinceInput'); p.focus(); fastSearchProvince(p.value);
         }
         box.appendChild(li);
     }
@@ -756,22 +657,17 @@ function fastSearchSchool(val) {
 
 function fastSearchProvince(val) {
     let box = document.getElementById('provinceDropdown'); box.innerHTML = '';
-    let results = [];
-    let search = val.trim().toLowerCase();
-    
+    let results = []; let search = val.trim().toLowerCase();
     for(let i=0; i<provincesList.length; i++){
         if(search === "" || provincesList[i].indexOf(search) > -1) results.push(provincesList[i]);
     }
-    
     if (results.length > 0) {
         for(let j=0; j<results.length; j++){
             let li = document.createElement('li');
             li.innerHTML = '<div class="opt-icon-box shrink-0 scale-75 bg-gray-100 text-gray-500"><i class="fi fi-rr-marker mt-1"></i></div> <span class="truncate flex-1 text-gray-700">' + results[j] + '</span>';
             li.onclick = function(e) {
-                e.stopPropagation(); 
-                let pInput = document.getElementById('provinceInput');
-                pInput.value = results[j];
-                box.classList.remove('show');
+                e.stopPropagation(); let pInput = document.getElementById('provinceInput');
+                pInput.value = results[j]; box.classList.remove('show');
             };
             box.appendChild(li);
         }
@@ -819,7 +715,6 @@ function nextStep(step) {
     else if (step === 2) {
         let school = document.getElementById('schoolInputSearch').value.trim();
         let province = document.getElementById('provinceInput').value.trim();
-
         if (!school || !province) { Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณาระบุโรงเรียนและจังหวัด', confirmButtonColor: '#f26b21'}); return; }
         changeStep(2, 3, '100%');
     }
@@ -905,142 +800,126 @@ function submitData(overwrite = false) {
             document.getElementById('successView').classList.remove('hidden'); 
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // รอแอนิเมชันเปิด SuccessView เล็กน้อยก่อนรัน Scratch Card
-            setTimeout(() => {
-                initScratchCard(res.scratchResult, res.claimStatus, res.fullName);
-            }, 100);
+            initScratchCard(res.scratchResult, res.claimStatus, res.fullName);
             
         } else if (res.status === 'duplicate') {
             Swal.fire({
-                title: 'พบข้อมูลซ้ำ',
-                text: res.message,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#f26b21',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ใช่, ทับข้อมูลเดิม',
-                cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    submitData(true); 
-                }
-            });
+                title: 'พบข้อมูลซ้ำ', text: res.message, icon: 'warning', showCancelButton: true,
+                confirmButtonColor: '#f26b21', cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่, ทับข้อมูลเดิม', cancelButtonText: 'ยกเลิก'
+            }).then((result) => { if (result.isConfirmed) submitData(true); });
         } else { 
             Swal.fire({icon: 'error', title: 'เกิดข้อผิดพลาด', text: res.message}); 
         }
-    })
-    .catch(err => {
+    }).catch(err => {
         btn.innerHTML = originTxt; btn.disabled = false; 
-        Swal.fire({icon: 'error', text: 'ระบบขัดข้องในการเชื่อมต่อกับเซิฟเวอร์ (CORS/Network Error)'});
+        Swal.fire({icon: 'error', text: 'ระบบขัดข้องในการเชื่อมต่อกับเซิฟเวอร์'});
     });
 }
 
-// ----------------------------------------------------
-// ระบบ Scratch Card และ รับรางวัล
-// ----------------------------------------------------
-let isWinnerGlobal = false;
-let claimStatusGlobal = 'WAITING';
-
 function initScratchCard(result, claimStatus, fullName) {
+    // เก็บตัวแปรไว้ใน Global เพื่อใช้ข้ามฟังก์ชัน
     window.currentFullName = fullName; 
-    isWinnerGlobal = (result === 'WIN');
-    claimStatusGlobal = claimStatus;
+    window.currentClaimStatus = claimStatus;
+    window.currentResult = result;
     
-    // ตั้งชื่อใน Modal ล่วงหน้า
-    document.getElementById('winnerNameDisplay').innerText = fullName;
-    
-    // เช็คสถานะปุ่มใน Modal ล่วงหน้า
-    const modalBtn = document.getElementById('btnModalClaim');
-    if (claimStatus === 'CLAIMED') {
-        modalBtn.innerHTML = '<i class="fi fi-sr-check-circle mt-1"></i> สิทธิ์ถูกใช้งานแล้ว';
-        modalBtn.className = "w-full bg-gray-400 text-white px-6 py-4 rounded-xl font-black shadow-none flex items-center justify-center gap-2 text-lg cursor-not-allowed";
-        modalBtn.onclick = null; // ปิดการกดซ้ำ
-    }
-
-    const container = document.getElementById('scratchContainer');
+    document.getElementById('winFullName').innerText = fullName;
     const bg = document.getElementById('scratchResultBg');
     const canvas = document.getElementById('scratchCanvas');
     
-    // รีเซ็ต Canvas (เผื่อมีการส่งข้อมูลซ้ำทับ)
-    canvas.style.opacity = "1";
-    canvas.style.display = "block";
+    // ฟังก์ชันจัดการ UI ของพื้นหลังการ์ด
+    window.renderBgCard = function() {
+        if (window.currentResult === 'WIN') {
+            if (window.currentClaimStatus === 'WAITING') {
+                bg.innerHTML = '<div class="animate-pulse flex flex-col items-center"><i class="fi fi-sr-gift text-4xl text-green-500 mb-2"></i><span class="text-green-600 text-xl font-black">ยินดีด้วย! คุณได้รับรางวัล</span><span class="text-xs text-green-600 mt-2 bg-white/80 px-3 py-1 rounded-full border border-green-200 shadow-sm">(คลิกเพื่อเปิดหน้าต่างรับสิทธิ์)</span></div>';
+                bg.className = 'absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-green-50 shadow-inner cursor-pointer hover:bg-green-100 transition-colors duration-300';
+                
+                // ถ้ารอรับสิทธิ์ ให้คลิกที่การ์ดเพื่อเปิดป๊อปอัปได้อีกครั้ง
+                bg.onclick = () => { if(window.currentClaimStatus === 'WAITING') openWinModal(); };
+            } else if (window.currentClaimStatus === 'CLAIMED') {
+                bg.innerHTML = '<i class="fi fi-sr-box-open text-4xl text-gray-400 mb-2"></i><span class="text-gray-500 text-lg font-bold">สิทธิ์ถูกใช้งานแล้ว</span>';
+                bg.className = 'absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-gray-100 border-2 border-gray-300 shadow-inner';
+                bg.onclick = null; // ปิดการคลิก
+            }
+        } else {
+            bg.innerHTML = '<i class="fi fi-sr-sad-tear text-4xl text-gray-400 mb-2"></i><span class="text-gray-500 text-lg font-bold">เสียใจด้วย ไม่ได้รับรางวัล</span>';
+            bg.className = 'absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-gray-50 shadow-inner';
+            bg.onclick = null;
+        }
+    };
     
-    // ตั้งค่ากราฟิกหลังบัตรขูด
-    if (isWinnerGlobal) {
-        bg.innerHTML = '<i class="fi fi-sr-gift text-5xl text-green-500 mb-2"></i><span class="text-green-600 text-2xl font-black mt-2">ยินดีด้วย!</span><span class="text-sm font-bold text-gray-500 mt-1">คุณได้รับรางวัล</span>';
-        bg.className = 'absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-green-50 shadow-inner border-2 border-green-200';
-    } else {
-        bg.innerHTML = '<i class="fi fi-sr-sad-tear text-5xl text-gray-400 mb-2"></i><span class="text-gray-500 text-xl font-black mt-2">เสียใจด้วย</span><span class="text-sm font-bold text-gray-400 mt-1">ไม่ได้รับรางวัลในครั้งนี้</span>';
-        bg.className = 'absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-gray-50 shadow-inner border-2 border-gray-200';
-    }
+    // วาดพื้นหลังตั้งแต่เริ่ม
+    window.renderBgCard();
 
+    // วาด Canvas แผ่นขูด
     setTimeout(() => {
-        const rect = container.getBoundingClientRect();
+        const container = document.getElementById('scratchContainer');
+        const rectW = container.clientWidth;
+        const rectH = container.clientHeight;
+        
         const dpr = window.devicePixelRatio || 1;
+        canvas.width = rectW * dpr;
+        canvas.height = rectH * dpr;
         
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        
+        canvas.style.width = `${rectW}px`;
+        canvas.style.height = `${rectH}px`;
+
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         ctx.scale(dpr, dpr); 
 
-        // เทสีเทาเป็นสารเคลือบ
         ctx.fillStyle = '#b0bec5'; 
-        ctx.fillRect(0, 0, rect.width, rect.height);
+        ctx.fillRect(0, 0, rectW, rectH);
         
-        // วาดข้อความให้ตรงกลางเป๊ะๆ โดยใช้พิกัดของแกน (width/2, height/2) ตามสเกลที่แท้จริง
         ctx.font = "bold 22px 'Noto Sans Thai', sans-serif";
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText("ขูดเพื่อลุ้นรางวัล!", rect.width / 2, rect.height / 2);
+        ctx.fillText("ขูดเพื่อลุ้นรางวัล!", rectW / 2, rectH / 2);
 
         let isDrawing = false;
-        let isRevealed = false; // กันการทำงานซ้ำ
+        let isCleared = false; // กันการทำงานซ้ำ
         
         function getMousePos(e) {
             let clientX = e.touches ? e.touches[0].clientX : e.clientX;
             let clientY = e.touches ? e.touches[0].clientY : e.clientY;
             let canvasRect = canvas.getBoundingClientRect();
-            return { 
-                x: clientX - canvasRect.left, 
-                y: clientY - canvasRect.top 
-            };
+            return { x: clientX - canvasRect.left, y: clientY - canvasRect.top };
         }
 
         function scratch(e) {
-            if (!isDrawing || isRevealed) return;
+            if (!isDrawing || isCleared) return;
             e.preventDefault(); 
             let pos = getMousePos(e);
             
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
-            ctx.arc(pos.x, pos.y, 30, 0, 2 * Math.PI); // รัศมีรอยขูด
+            ctx.arc(pos.x, pos.y, 25, 0, 2 * Math.PI); 
             ctx.fill();
         }
 
-        // ระบบเช็คว่าขูดไปเยอะหรือยัง (คำนวณจาก Alpha Channel แบบคร่าวๆ)
+        // ระบบเช็คว่าขูดไปกี่เปอร์เซ็นต์แล้ว (เช็คตอนยกนิ้ว)
         function checkScratchPercent() {
-            if (isRevealed) return;
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const pixels = imageData.data;
-            let transparentCount = 0;
-            // เช็คทีละ 16 พิกเซลเพื่อลดภาระเครื่อง (4 * 4 กระโดดไป)
-            for (let i = 3; i < pixels.length; i += 16) { 
-                if (pixels[i] < 128) transparentCount++; 
+            if(isCleared) return;
+            const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            let transparentPixels = 0;
+            // เช็คค่า Alpha ช่องที่ 4 ของทุกพิกเซล
+            for (let i = 3; i < pixels.length; i += 4) {
+                if (pixels[i] === 0) transparentPixels++;
             }
-            const totalPixelsToCheck = pixels.length / 16;
-            const percent = (transparentCount / totalPixelsToCheck) * 100;
+            const percent = (transparentPixels / (pixels.length / 4)) * 100;
             
-            if (percent > 45) { // ถ้าขูดไปเกิน 45% ให้แสดงผลเลย
-                isRevealed = true;
-                canvas.style.opacity = "0"; // Fade out canvas
-                setTimeout(() => {
-                    canvas.style.display = "none";
-                    if (isWinnerGlobal) {
-                        openWinModal(); // เปิด Pop-up ถัาถูกรางวัล
+            // ถ้าขูดเกิน 40% ให้เคลียร์อัตโนมัติแล้วเด้ง Popup
+            if (percent > 40) {
+                isCleared = true;
+                canvas.style.transition = 'opacity 0.6s ease';
+                canvas.style.opacity = '0'; // เฟดออกอย่างสวยงาม
+                setTimeout(() => { 
+                    canvas.classList.add('hidden'); 
+                    // ถ้าถูกรางวัลและยังไม่เคลม ให้เปิด Popup
+                    if(window.currentResult === 'WIN' && window.currentClaimStatus === 'WAITING') {
+                        openWinModal();
                     }
-                }, 500); // รอจังหวะ fade 0.5s
+                }, 600);
             }
         }
 
@@ -1048,47 +927,53 @@ function initScratchCard(result, claimStatus, fullName) {
         canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }, {passive: false});
         canvas.addEventListener('mousemove', scratch);
         canvas.addEventListener('touchmove', scratch, {passive: false});
-        
-        // เช็คเปอร์เซ็นต์ทุกครั้งที่ยกนิ้ว/เมาส์ขึ้น
         window.addEventListener('mouseup', () => { isDrawing = false; checkScratchPercent(); });
         window.addEventListener('touchend', () => { isDrawing = false; checkScratchPercent(); });
         
-    }, 100); 
+    }, 600); 
 }
 
 function openWinModal() {
     let modal = document.getElementById('winModal');
-    let modalBox = modal.querySelector('div');
+    let modalBox = document.getElementById('winModalBox');
     
     modal.classList.remove('hidden');
-    // หน่วงเวลาให้ display:block ทำงานก่อน แล้วค่อยใส่ opacity
+    modal.classList.add('flex'); // ใช้ Flex เพื่อให้จออยู่กึ่งกลางแน่นอน
+    
     setTimeout(() => {
         modal.classList.remove('opacity-0');
-        modalBox.classList.add('animate-popIn');
+        modalBox.classList.remove('scale-95');
+        modalBox.classList.add('scale-100');
     }, 50);
 }
 
 function closeWinModal() {
     let modal = document.getElementById('winModal');
+    let modalBox = document.getElementById('winModalBox');
+    
     modal.classList.add('opacity-0');
+    modalBox.classList.remove('scale-100');
+    modalBox.classList.add('scale-95');
+    
     setTimeout(() => {
+        modal.classList.remove('flex');
         modal.classList.add('hidden');
-    }, 300); // รอ animation fade out
+    }, 300);
 }
 
 function claimPrizeBtn() {
     Swal.fire({
         title: 'แน่ใจว่าอยู่กับเจ้าหน้าที่?',
-        text: "กรุณากดยืนยันเมื่ออยู่ต่อหน้าเจ้าหน้าที่ที่บูธเท่านั้น! หากกดยืนยันแล้วจะไม่สามารถรับรางวัลซ้ำได้อีก",
+        text: "หากกดตกลงแล้วจะไม่สามารถรับรางวัลซ้ำได้อีก (ให้เจ้าหน้าที่เป็นคนกดเท่านั้น!)",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#22c55e',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'ใช่, อยู่กับเจ้าหน้าที่',
+        confirmButtonText: 'ยืนยันรับรางวัล',
         cancelButtonText: 'ยกเลิก'
     }).then((result) => {
         if (result.isConfirmed) {
-            let btn = document.getElementById('btnModalClaim');
+            let btn = document.getElementById('btnClaim');
             btn.innerHTML = '<span class="loader mr-2 !w-5 !h-5 !border-2"></span> กำลังอัปเดต...';
             btn.disabled = true;
 
@@ -1099,20 +984,25 @@ function claimPrizeBtn() {
             .then(r => r.json())
             .then(res => {
                 if(res.status === 'success') {
-                    // เปลี่ยนปุ่มเป็นสีเทาและเปลี่ยนข้อความ
-                    btn.innerHTML = '<i class="fi fi-sr-check-circle mt-1"></i> สิทธิ์ถูกใช้งานแล้ว';
-                    btn.className = "w-full bg-gray-400 text-white px-6 py-4 rounded-xl font-black shadow-none flex items-center justify-center gap-2 text-lg cursor-not-allowed";
-                    btn.onclick = null; // ปิดการกดซ้ำ
+                    // ปรับสถานะ Global เป็นเคลมแล้ว
+                    window.currentClaimStatus = 'CLAIMED';
                     
-                    Swal.fire({
-                        title: 'สำเร็จ!', 
-                        text: 'ยืนยันการใช้สิทธิ์รับรางวัลเรียบร้อยแล้ว', 
-                        icon: 'success',
-                        confirmButtonColor: '#22c55e'
-                    });
+                    // แปลงโฉมเนื้อหาใน Modal ให้กลายเป็นหน้าต่าง "ใช้สิทธิ์แล้ว"
+                    document.getElementById('winModalContent').innerHTML = `
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fi fi-sr-box-open text-4xl text-gray-400 mt-2"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-gray-600 mb-2">สิทธิ์ถูกใช้งานแล้ว</h3>
+                        <p class="text-gray-500 text-sm mb-6">ขอบคุณที่ร่วมสนุกกับราชวิทยาลัยจุฬาภรณ์</p>
+                        <button onclick="closeWinModal()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-4 rounded-xl font-bold transition text-lg">ปิดหน้าต่าง</button>
+                    `;
+                    
+                    // รีเฟรชหน้าตาของการ์ดด้านล่างให้เป็นสีเทาและคลิกไม่ได้
+                    window.renderBgCard();
+
                 } else {
                     Swal.fire('ข้อผิดพลาด', res.message, 'error');
-                    btn.innerHTML = '<i class="fi fi-sr-hand-holding-box mt-1"></i> กดรับสิทธิ์ (เจ้าหน้าที่เท่านั้น)';
+                    btn.innerHTML = '<i class="fi fi-sr-gift mt-1"></i> กดใช้สิทธิ์รับรางวัล';
                     btn.disabled = false;
                 }
             })
@@ -1125,7 +1015,7 @@ function claimPrizeBtn() {
 }
 
 function goToMedia() {
-    let btn = document.querySelector('#successView button:last-child');
+    let btn = document.querySelector('#successView > button');
     btn.innerHTML = '<span class="loader mr-3"></span> กำลังพาท่านไป...'; btn.disabled = true;
     window.location.href = "media.html";
 }
