@@ -77,20 +77,20 @@
     }
     .custom-select-trigger:focus, .custom-select-trigger.active-trigger { border-color: rgba(0, 51, 128, 0.4); background-color: #fff; box-shadow: 0 0 0 4px rgba(0, 51, 128, 0.1); }
     
-    .custom-options, #schoolDropdown { 
+    .custom-options, #schoolDropdown, #provinceDropdown { 
         position: absolute; width: 100%; background: #ffffff; border: 1px solid #e2e8f0; 
         border-radius: 0.75rem; margin-top: 6px; max-height: 280px; overflow-y: auto; 
         box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); 
         padding: 0.4rem; z-index: 100;
         opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.2s ease; transform: translateY(-10px);
     }
-    .custom-select-wrapper.open .custom-options, #schoolDropdown.show { opacity: 1; visibility: visible; pointer-events: all; transform: translateY(0); }
+    .custom-select-wrapper.open .custom-options, #schoolDropdown.show, #provinceDropdown.show { opacity: 1; visibility: visible; pointer-events: all; transform: translateY(0); }
     
-    .custom-option, #schoolDropdown li { 
+    .custom-option, #schoolDropdown li, #provinceDropdown li { 
         padding: 0.75rem 1rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; 
         transition: all 0.15s ease; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 500; color: #374151; margin-bottom: 2px;
     }
-    .custom-option:hover, #schoolDropdown li:hover { background-color: #fff8f0; color: #f26b21; }
+    .custom-option:hover, #schoolDropdown li:hover, #provinceDropdown li:hover { background-color: #fff8f0; color: #f26b21; }
     .custom-option.selected { background-color: #fff8f0; color: #f26b21; font-weight: 700; }
     
     /* Dropdown Icon Circle */
@@ -98,8 +98,8 @@
     .custom-option:hover .opt-icon-box, .custom-option.selected .opt-icon-box { background-color: #f26b21; color: white; }
 
     /* Custom Scrollbar */
-    .custom-options::-webkit-scrollbar, #schoolDropdown::-webkit-scrollbar { width: 6px; }
-    .custom-options::-webkit-scrollbar-thumb, #schoolDropdown::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+    .custom-options::-webkit-scrollbar, #schoolDropdown::-webkit-scrollbar, #provinceDropdown::-webkit-scrollbar { width: 6px; }
+    .custom-options::-webkit-scrollbar-thumb, #schoolDropdown::-webkit-scrollbar-thumb, #provinceDropdown::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
 
     /* -------------------------------------
        Cards for Radio & Checkboxes
@@ -274,18 +274,12 @@
                   <div class="bg-gray-50 p-6 lg:p-8 rounded-2xl border border-gray-200 shadow-sm relative z-50">
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                           <div class="relative">
-                              <label class="block text-sm font-bold mb-2 text-[#003380]">โรงเรียนที่จบระดับชั้น ม.6 หรือ เทียบเท่า <span class="text-red-500">*</span></label>
-                              <div class="group-input relative">
-                                  <i class="fi fi-rr-search icon-input top-1/2 transform -translate-y-1/2 text-xl mt-0.5 z-10 text-gray-500"></i>
-                                  <input type="text" id="schoolInputSearch" class="input-custom with-icon bg-gray-200 border-gray-200 focus:bg-white focus:border-[#003380]" autocomplete="off" placeholder="พิมพ์ชื่อโรงเรียนเพื่อค้นหา..." oninput="fastSearchSchool(this.value)">
-                              </div>
-                              <ul id="schoolDropdown"></ul>
-                          </div>
-                          <div>
                               <label class="block text-sm font-bold mb-2 text-[#003380]">จังหวัดของโรงเรียน <span class="text-red-500">*</span></label>
-                              <div class="group-input">
-                                  <input type="text" id="provinceInput" class="input-custom bg-gray-200 text-gray-500 font-medium cursor-not-allowed border-gray-200 focus:border-gray-200" placeholder="จังหวัดจะขึ้นอัตโนมัติเมื่อเลือกโรงเรียน" readonly>
+                              <div class="group-input relative">
+                                  <i id="provIcon" class="fi fi-rr-marker icon-input top-1/2 transform -translate-y-1/2 text-xl mt-0.5 z-10 text-gray-400 hidden"></i>
+                                  <input type="text" id="provinceInput" class="input-custom bg-gray-200 text-gray-500 font-medium cursor-not-allowed border-gray-200 focus:border-gray-200" placeholder="จังหวัดจะขึ้นอัตโนมัติเมื่อเลือกโรงเรียน" readonly oninput="fastSearchProvince(this.value)" onfocus="if(!this.readOnly) fastSearchProvince(this.value)">
                               </div>
+                              <ul id="provinceDropdown"></ul>
                           </div>
                       </div>
                   </div>
@@ -384,6 +378,8 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbx08yDojfbtqMQb--DTSJ0lgD51A_MlEtx1Q5TLv7-yB1Vi34jrB8l72WYVT4fjmdCB/exec"; 
 
 let rawSchoolData = []; 
+
+const provincesList = ["กรุงเทพมหานคร","กระบี่","กาญจนบุรี","กาฬสินธุ์","กำแพงเพชร","ขอนแก่น","จันทบุรี","ฉะเชิงเทรา","ชลบุรี","ชัยนาท","ชัยภูมิ","ชุมพร","เชียงราย","เชียงใหม่","ตรัง","ตราด","ตาก","นครนายก","นครปฐม","นครพนม","นครราชสีมา","นครศรีธรรมราช","นครสวรรค์","นนทบุรี","นราธิวาส","น่าน","บึงกาฬ","บุรีรัมย์","ปทุมธานี","ประจวบคีรีขันธ์","ปราจีนบุรี","ปัตตานี","พระนครศรีอยุธยา","พะเยา","พังงา","พัทลุง","พิจิตร","พิษณุโลก","เพชรบุรี","เพชรบูรณ์","แพร่","ภูเก็ต","มหาสารคาม","มุกดาหาร","แม่ฮ่องสอน","ยโสธร","ยะลา","ร้อยเอ็ด","ระนอง","ระยอง","ราชบุรี","ลพบุรี","ลำปาง","ลำพูน","เลย","ศรีสะเกษ","สกลนคร","สงขลา","สตูล","สมุทรปราการ","สมุทรสงคราม","สมุทรสาคร","สระแก้ว","สระบุรี","สิงห์บุรี","สุโขทัย","สุพรรณบุรี","สุราษฎร์ธานี","สุรินทร์","หนองคาย","หนองบัวลำภู","อ่างทอง","อำนาจเจริญ","อุดรธานี","อุตรดิตถ์","อุทัยธานี","อุบลราชธานี"];
 
 // --- Data Sources with Icons ---
 const prefixData = [
@@ -556,6 +552,7 @@ window.onload = function() {
     document.addEventListener('click', function() {
         document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
         document.getElementById('schoolDropdown').classList.remove('show');
+        document.getElementById('provinceDropdown').classList.remove('show');
     });
 
     let currentCoursePrefix = "";
@@ -613,9 +610,15 @@ window.onload = function() {
                     e.stopPropagation(); let schInput = document.getElementById('schoolInputSearch');
                     schInput.value = results[j][0];
                     schInput.style.borderColor = 'rgba(0, 51, 128, 0.4)'; schInput.style.backgroundColor = '#fff';
-                    document.getElementById('provinceInput').value = results[j][1];
-                    document.getElementById('provinceInput').classList.remove('text-gray-500');
-                    document.getElementById('provinceInput').classList.add('text-gray-800');
+                    
+                    // เมื่อเลือกโรงเรียน ให้กลับไปล็อคช่องจังหวัดเหมือนเดิม
+                    let p = document.getElementById('provinceInput');
+                    p.value = results[j][1];
+                    p.readOnly = true;
+                    p.classList.add('bg-gray-200', 'cursor-not-allowed', 'text-gray-500', 'border-gray-200', 'focus:border-gray-200');
+                    p.classList.remove('text-gray-800', 'with-icon');
+                    document.getElementById('provIcon').classList.add('hidden');
+                    
                     box.classList.remove('show');
                 };
                 box.appendChild(li);
@@ -625,11 +628,47 @@ window.onload = function() {
             li.innerHTML = '<div class="text-center w-full py-2"><span class="text-gray-500 text-sm">ไม่พบชื่อโรงเรียนนี้</span><br><span class="text-xs text-[#f26b21] mt-1 inline-block">พิมพ์ชื่อใหม่ลงไปได้เลยครับ</span></div>';
             li.onclick = function(e) { 
                 e.stopPropagation(); box.classList.remove('show'); 
+                
+                // ปลดล็อคช่องจังหวัด พร้อมเรียกแสดงผลรายชื่อ 77 จังหวัด
                 let p = document.getElementById('provinceInput');
                 p.readOnly = false; p.value = ""; p.focus(); 
-                p.classList.remove('bg-gray-200', 'cursor-not-allowed', 'text-gray-500'); p.classList.add('text-gray-800');
-                p.placeholder = "กรุณาระบุจังหวัด...";
+                p.classList.remove('bg-gray-200', 'cursor-not-allowed', 'text-gray-500', 'border-gray-200', 'focus:border-gray-200');
+                p.classList.add('text-gray-800', 'with-icon');
+                p.placeholder = "พิมพ์เพื่อค้นหาจังหวัด...";
+                document.getElementById('provIcon').classList.remove('hidden');
+                
+                fastSearchProvince("");
             }
+            box.appendChild(li);
+        }
+        box.classList.add('show');
+    }
+
+    // ฟังก์ชันใหม่: ระบบค้นหา/ตัวเลือก 77 จังหวัด
+    function fastSearchProvince(val) {
+        let box = document.getElementById('provinceDropdown'); box.innerHTML = '';
+        let results = [];
+        let search = val.trim().toLowerCase();
+        
+        for(let i=0; i<provincesList.length; i++){
+            if(search === "" || provincesList[i].indexOf(search) > -1) results.push(provincesList[i]);
+        }
+        
+        if (results.length > 0) {
+            for(let j=0; j<results.length; j++){
+                let li = document.createElement('li');
+                li.innerHTML = '<div class="opt-icon-box shrink-0 scale-75 bg-gray-100 text-gray-500"><i class="fi fi-rr-marker mt-1"></i></div> <span class="truncate flex-1 text-gray-700">' + results[j] + '</span>';
+                li.onclick = function(e) {
+                    e.stopPropagation(); 
+                    let pInput = document.getElementById('provinceInput');
+                    pInput.value = results[j];
+                    box.classList.remove('show');
+                };
+                box.appendChild(li);
+            }
+        } else {
+            let li = document.createElement('li');
+            li.innerHTML = '<span class="text-gray-500 text-sm text-center w-full block py-2">ไม่พบชื่อจังหวัดนี้</span>';
             box.appendChild(li);
         }
         box.classList.add('show');
