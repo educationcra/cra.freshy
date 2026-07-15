@@ -743,8 +743,8 @@ function submitData(overwrite = false) {
             document.getElementById('successView').classList.remove('hidden'); 
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // 🔴 แก้ไข: ส่ง ชื่อ และ นามสกุล แยกกันไปเตรียมขูดบัตร (ไม่ต้องใช้รหัสนักศึกษาแล้ว)
-            initScratchCard(res.scratchResult, res.claimStatus, payload.fname, payload.lname);
+            // 🔴 แก้ไข: รับ fullName ที่ตรงกับฐานข้อมูลเป๊ะๆ จาก Backend มาเลย
+            initScratchCard(res.scratchResult, res.claimStatus, res.fullName);
             
         } else if (res.status === 'duplicate') {
             Swal.fire({ title: 'พบข้อมูลซ้ำ', text: res.message, icon: 'warning', showCancelButton: true, confirmButtonColor: '#f26b21', cancelButtonColor: '#d33', confirmButtonText: 'ใช่, ทับข้อมูลเดิม', cancelButtonText: 'ยกเลิก' })
@@ -765,11 +765,9 @@ function submitData(overwrite = false) {
 let isCardCleared = false; 
 let glbIsWinner = false; 
 
-// 🔴 แก้ไข: รับค่า fname และ lname แยกกัน
-function initScratchCard(result, claimStatus, fname, lname) {
-    window.currentFname = fname; 
-    window.currentLname = lname;
-    window.currentFullName = fname + " " + lname; 
+// 🔴 แก้ไข: รับพารามิเตอร์ fullName ที่ดึงตรงมาจากฐานข้อมูล Backend
+function initScratchCard(result, claimStatus, fullName) {
+    window.currentFullName = fullName; // อ้างอิงตัวแปรนี้ตรงๆ เลย 
     window.claimStatus = claimStatus;
     glbIsWinner = (result === 'WIN');
     
@@ -941,11 +939,8 @@ function claimPrizeBtn() {
             btn.disabled = true;
             btn.classList.add('opacity-80', 'cursor-not-allowed');
 
-            // 🔴 แก้ไข: ส่งข้อมูลชื่อไปครบทุกรูปแบบ (fname, lname, fullName) 
-            // รับรองว่าหลังบ้านหาเจอชัวร์ๆ โดยไม่ต้องใช้ ID
+            // 🔴 แก้ไข: ส่งข้อมูล fullName ที่รับมาจาก Backend เข้าไปเช็คเพื่อความชัวร์ 100%
             let claimPayload = {
-                fname: window.currentFname,
-                lname: window.currentLname,
                 fullName: window.currentFullName
             };
 
