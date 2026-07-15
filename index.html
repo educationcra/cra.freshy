@@ -743,8 +743,8 @@ function submitData(overwrite = false) {
             document.getElementById('successView').classList.remove('hidden'); 
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // ส่งค่าไปเตรียมขูดบัตร (ส่งชื่อเต็ม และ **รหัสนักศึกษา** ไปแทน)
-            initScratchCard(res.scratchResult, res.claimStatus, payload.fname + " " + payload.lname, finalStudentId);
+            // 🔴 แก้ไข: ส่ง ชื่อ และ นามสกุล แยกกันไปเตรียมขูดบัตร (ไม่ต้องใช้รหัสนักศึกษาแล้ว)
+            initScratchCard(res.scratchResult, res.claimStatus, payload.fname, payload.lname);
             
         } else if (res.status === 'duplicate') {
             Swal.fire({ title: 'พบข้อมูลซ้ำ', text: res.message, icon: 'warning', showCancelButton: true, confirmButtonColor: '#f26b21', cancelButtonColor: '#d33', confirmButtonText: 'ใช่, ทับข้อมูลเดิม', cancelButtonText: 'ยกเลิก' })
@@ -765,9 +765,11 @@ function submitData(overwrite = false) {
 let isCardCleared = false; 
 let glbIsWinner = false; 
 
-function initScratchCard(result, claimStatus, fullName, studentId) {
-    window.currentFullName = fullName; 
-    window.currentStudentId = studentId; // ** เก็บ StudentID ไว้ใช้งานตอนกดรับสิทธิ์
+// 🔴 แก้ไข: รับค่า fname และ lname แยกกัน
+function initScratchCard(result, claimStatus, fname, lname) {
+    window.currentFname = fname; 
+    window.currentLname = lname;
+    window.currentFullName = fname + " " + lname; 
     window.claimStatus = claimStatus;
     glbIsWinner = (result === 'WIN');
     
@@ -939,10 +941,17 @@ function claimPrizeBtn() {
             btn.disabled = true;
             btn.classList.add('opacity-80', 'cursor-not-allowed');
 
+            // 🔴 แก้ไข: ส่งข้อมูลชื่อไปครบทุกรูปแบบ (fname, lname, fullName) 
+            // รับรองว่าหลังบ้านหาเจอชัวร์ๆ โดยไม่ต้องใช้ ID
+            let claimPayload = {
+                fname: window.currentFname,
+                lname: window.currentLname,
+                fullName: window.currentFullName
+            };
+
             fetch(API_URL, {
                 method: "POST",
-                // 🔴 จุดสำคัญ: เปลี่ยนจาก fullName เป็น studentId แล้ว! 
-                body: JSON.stringify({ action: "claimPrize", payload: { studentId: window.currentStudentId } }) 
+                body: JSON.stringify({ action: "claimPrize", payload: claimPayload }) 
             })
             .then(r => r.json())
             .then(res => {
