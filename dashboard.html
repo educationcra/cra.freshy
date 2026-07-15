@@ -50,6 +50,7 @@
   </div>
 
   <div id="mainApp" class="container mx-auto px-4 py-8 max-w-7xl opacity-0 transition-opacity duration-700 hidden">
+    <!-- Header -->
     <header class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 border-b border-gray-200 pb-6 no-print">
       <div class="flex items-center gap-4">
         <div class="w-14 h-14 bg-blue-100 rounded-2xl flex justify-center items-center text-cra-secondary">
@@ -74,6 +75,7 @@
         <i class="fi fi-sr-apps text-cra-primary"></i> <span id="titleText">ข้อมูลผู้ตอบแบบสำรวจทั้งหมด</span>
     </div>
 
+    <!-- KPI Box -->
     <div class="mb-8 bg-gradient-to-r from-cra-light to-cra-secondary rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between shadow-lg relative overflow-hidden">
        <i class="fi fi-sr-users absolute -right-6 -bottom-6 text-9xl text-white opacity-10"></i>
        <h2 class="text-xl md:text-2xl font-bold opacity-95 flex items-center gap-3 relative z-10">
@@ -83,19 +85,19 @@
     </div>
 
     <!-- แถวบน: Pie Charts -->
-    <div id="pieCardContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8"></div>
+    <div id="pieCardContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"></div>
 
-    <!-- ตารางจัดอันดับหลักสูตร -->
+    <!-- ตารางรายชื่อหลักสูตร (กดเพื่อดูรายชื่อนักศึกษา) -->
     <div class="glass-card p-8 mb-8">
       <h3 class="text-xl font-black text-cra-secondary mb-6 flex items-center gap-3">
-        <i class="fi fi-sr-graduation-cap text-cra-primary text-2xl"></i> อันดับหลักสูตรที่ผู้สมัครเข้าศึกษา
+        <i class="fi fi-sr-graduation-cap text-cra-primary text-2xl"></i> สถิติผู้เข้าศึกษาตามหลักสูตร
       </h3>
       <div class="overflow-x-auto">
         <table class="w-full text-sm text-left border-collapse">
           <thead class="bg-blue-50 text-blue-800 font-bold uppercase rounded-t-xl">
               <tr>
-                  <th class="p-4 w-20 text-center">อันดับ</th>
-                  <th class="p-4">หลักสูตร</th>
+                  <th class="p-4 w-16 text-center">#</th>
+                  <th class="p-4">หลักสูตร <span class="text-xs text-gray-500 font-normal ml-2 no-print">(คลิกที่แถวเพื่อดูรายชื่อ)</span></th>
                   <th class="p-4 text-right">จำนวนคน</th>
                   <th class="p-4 text-right">ร้อยละ</th>
                   <th class="p-4 w-1/4 no-print">สัดส่วน</th>
@@ -106,8 +108,29 @@
       </div>
     </div>
 
-    <!-- แถวกลาง: Bar Charts -->
-    <div id="dynamicGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"></div>
+    <!-- ตารางโรงเรียน (แบ่งหน้า และไฮไลท์ Top 3) -->
+    <div class="glass-card p-8 mb-8">
+      <h3 class="text-xl font-black text-cra-secondary mb-6 flex items-center gap-3">
+        <i class="fi fi-sr-school text-cra-primary text-2xl"></i> โรงเรียนและสถานศึกษาเดิม
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left border-collapse">
+          <thead class="bg-gray-50 text-gray-800 font-bold uppercase rounded-t-xl">
+              <tr>
+                  <th class="p-4 w-20 text-center">อันดับ</th>
+                  <th class="p-4">รายชื่อโรงเรียน</th>
+                  <th class="p-4 text-right w-32">จำนวนคน</th>
+                  <th class="p-4 text-right w-32">ร้อยละ</th>
+              </tr>
+          </thead>
+          <tbody id="schoolTableBody" class="divide-y divide-gray-100"></tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center mt-6 border-t border-gray-100 pt-5 no-print" id="schoolPagination"></div>
+    </div>
+
+    <!-- โซเชียลมีเดีย: ติดตามเพจ + แพลตฟอร์ม -->
+    <div id="socialMediaContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"></div>
 
     <!-- ตารางแยก: เหตุผล และ ช่องทาง -->
     <div class="glass-card p-8 mb-8">
@@ -137,11 +160,11 @@
     </div>
   </div>
 
-  <!-- Modal สำหรับ Filter / Comments -->
+  <!-- Modal สำหรับ Filter / Comments / รายชื่อนักศึกษา -->
   <div id="modalBase" class="fixed inset-0 z-50 hidden no-print">
     <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
     <div class="absolute inset-0 flex items-center justify-center p-4">
-      <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col relative overflow-hidden">
+      <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col relative overflow-hidden">
         <div class="p-6 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
           <h2 id="mHeader" class="text-xl font-black text-gray-800 flex items-center gap-2"></h2>
           <button onclick="closeModal()" class="bg-white text-gray-400 hover:text-red-500 rounded-full w-10 h-10 flex justify-center items-center shadow-sm transition"><i class="fi fi-sr-cross-small text-xl mt-1"></i></button>
@@ -156,13 +179,18 @@
     // ==========================================
     // ⚠️ ใส่ URL ของ Google Apps Script ของคุณที่นี่ ⚠️
     // ==========================================
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbx08yDojfbtqMQb--DTSJ0lgD51A_MlEtx1Q5TLv7-yB1Vi34jrB8l72WYVT4fjmdCB/exec'; 
+    const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; 
 
     Chart.register(ChartDataLabels);
     
     let RAW_DATA = [];
+    let FILTERED_DATA = []; // ข้อมูลที่ผ่านการกรอง
+    let SCHOOL_DATA = []; // ข้อมูลโรงเรียน
     let filterCourse = "All"; 
     let filterRound = "All"; 
+    
+    let schoolCurrentPage = 1;
+    const schoolPerPage = 10;
 
     window.onload = async () => {
       try {
@@ -200,7 +228,8 @@
       // กรองข้อมูล
       if(filterCourse !== "All") data = data.filter(r => String(r[0]).trim() === filterCourse);
       if(filterRound !== "All") data = data.filter(r => String(r[4]).trim() === filterRound);
-
+      
+      FILTERED_DATA = data; // อัปเดตข้อมูล Global
       const total = data.length;
       
       let titleTxt = "ข้อมูลผู้ตอบแบบสำรวจทั้งหมด";
@@ -222,19 +251,21 @@
 
       // Render Charts & Tables
       renderPieSections(data, total);
-      renderRankingTable('currTableBody', getCounts(data, 0, false), total, true); 
+      renderCourseTable('currTableBody', getCounts(data, 0, false), total); 
 
-      // Render Bar Charts
-      const dynGrid = document.getElementById('dynamicGrid'); dynGrid.innerHTML = '';
-      const configs = [
-        { id: 'prov', col: 7, title: 'จังหวัดของโรงเรียน (Top 10)', icon: 'fi-sr-map-marker', multi: false, top: 10 },
-        { id: 'plat', col: 10, title: 'แพลตฟอร์มที่ติดตาม', icon: 'fi-sr-mobile-notch', multi: false, top: 0 }
+      // Render Schools
+      processSchoolData(data);
+
+      // Render Social Media Container (ติดตามเพจ + แพลตฟอร์ม)
+      const socialContainer = document.getElementById('socialMediaContainer'); socialContainer.innerHTML = '';
+      const socialItems = [
+          { id: 'Page', col: 9, title: 'ติดตามเพจ Education CRA', icon: 'fi-sr-social-network', type: 'pie' },
+          { id: 'Plat', col: 10, title: 'แพลตฟอร์มที่ติดตาม', icon: 'fi-sr-mobile-notch', type: 'bar' }
       ];
-      
-      configs.forEach(c => {
-        const div = document.createElement('div'); div.className = "glass-card p-6 flex flex-col";
-        div.innerHTML = `<div class="flex justify-between items-center mb-6"><h3 class="font-bold text-gray-700 flex items-center gap-2"><i class="fi ${c.icon} text-cra-primary"></i> ${c.title}</h3><div class="flex bg-gray-100 rounded-lg p-1 no-print"><button onclick="toggleV('${c.id}','table')" id="btn${c.id}Table" class="px-2 py-1 rounded bg-white shadow text-cra-primary transition"><i class="fi fi-sr-apps-sort"></i></button><button onclick="toggleV('${c.id}','chart')" id="btn${c.id}Chart" class="px-2 py-1 rounded text-gray-400 hover:text-gray-600 transition"><i class="fi fi-sr-chart-histogram"></i></button></div></div><div id="v${c.id}Chart" class="h-56 chart-container hidden"><canvas id="c${c.id}"></canvas></div><div id="v${c.id}Table" class="table-container">${renderTableHTML(getCounts(data, c.col, c.multi, c.top), total, c.title)}</div>`;
-        dynGrid.appendChild(div); renderChart(`c${c.id}`, 'bar', getCounts(data, c.col, c.multi, c.top), total);
+      socialItems.forEach(c => {
+          const div = document.createElement('div'); div.className = "glass-card p-6 flex flex-col w-full";
+          div.innerHTML = `<div class="flex justify-between items-center mb-6"><h3 class="font-bold text-gray-700 flex items-center gap-2"><i class="fi ${c.icon} text-cra-primary"></i> ${c.title}</h3><div class="flex bg-gray-100 rounded-lg p-1 no-print"><button onclick="toggleV('${c.id}','table')" id="btn${c.id}Table" class="px-2 py-1 rounded bg-white shadow text-cra-primary transition"><i class="fi fi-sr-apps-sort"></i></button><button onclick="toggleV('${c.id}','chart')" id="btn${c.id}Chart" class="px-2 py-1 rounded text-gray-400 hover:text-gray-600 transition"><i class="fi ${c.type === 'pie' ? 'fi-sr-chart-pie-alt' : 'fi-sr-chart-histogram'}"></i></button></div></div><div id="v${c.id}Chart" class="h-64 chart-container hidden"><canvas id="c${c.id}"></canvas></div><div id="v${c.id}Table" class="table-container">${renderTableHTML(getCounts(data, c.col, false), total, c.title)}</div>`;
+          socialContainer.appendChild(div); renderChart(`c${c.id}`, c.type, getCounts(data, c.col, false), total);
       });
 
       renderSplitTables(data, total);
@@ -258,34 +289,125 @@
         return sorted;
     }
 
-    function renderRankingTable(containerId, data, total, showBar = false) {
-      const medals = [
-          '<div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mx-auto shadow-sm border border-yellow-200"><i class="fi fi-sr-medal text-xl text-yellow-500 mt-1"></i></div>', 
-          '<div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mx-auto shadow-sm border border-gray-200"><i class="fi fi-sr-medal text-xl text-gray-400 mt-1"></i></div>', 
-          '<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mx-auto shadow-sm border border-orange-200"><i class="fi fi-sr-medal text-xl text-orange-500 mt-1"></i></div>'
-      ];
-      
+    /* 🌟 ตารางหลักสูตร แบบใหม่ 🌟 */
+    function renderCourseTable(containerId, data, total) {
       document.getElementById(containerId).innerHTML = data.map((it, i) => {
         let p = preciseRound(it[1]*100/total, 2).toFixed(2);
-        let icon = i < 3 ? medals[i] : `<span class="font-black text-gray-400 text-lg">${i+1}</span>`;
-        let rs = i===0 ? "bg-orange-50/60" : (i===1 ? "bg-gray-50/60" : (i===2 ? "bg-amber-50/30" : ""));
-        
-        return `<tr class="${rs} hover:bg-blue-50 transition-colors"> 
-            <td class="p-3 text-center align-middle">${icon}</td> 
-            <td class="p-3 font-bold text-gray-700">${it[0]}</td> 
+        return `<tr class="hover:bg-blue-50 transition-colors cursor-pointer group" onclick="openCourseStudentsModal('${it[0]}')"> 
+            <td class="p-3 text-center align-middle font-bold text-gray-400">${i+1}</td> 
+            <td class="p-3 font-bold text-gray-700 group-hover:text-cra-secondary transition-colors">${it[0]} <span class="hidden group-hover:inline-block ml-2 text-xs text-blue-500 font-medium">กดดูรายชื่อ <i class="fi fi-sr-arrow-right"></i></span></td> 
             <td class="p-3 text-right font-black text-cra-secondary text-lg">${it[1]}</td> 
             <td class="p-3 text-right text-gray-500 font-bold">${p}%</td> 
-            ${showBar ? `<td class="p-3 no-print"><div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden"><div class="bg-cra-primary h-2.5 rounded-full" style="width:${p}%"></div></div></td>` : ''}
+            <td class="p-3 no-print"><div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden"><div class="bg-cra-primary h-2.5 rounded-full" style="width:${p}%"></div></div></td>
         </tr>`;
       }).join('');
+    }
+
+    /* 🌟 เปิดดูรายชื่อนักศึกษาในหลักสูตร 🌟 */
+    function openCourseStudentsModal(courseName) {
+        document.getElementById('mHeader').innerHTML = `<i class="fi fi-sr-graduation-cap text-cra-secondary"></i> ผู้ที่ศึกษาใน: ${courseName}`;
+        
+        let students = FILTERED_DATA.filter(r => String(r[0]).trim() === courseName);
+        
+        let html = `<div class="overflow-x-auto"><table class="w-full text-sm text-left border-collapse">
+            <thead class="bg-blue-50 text-blue-800 font-bold sticky top-0">
+                <tr>
+                    <th class="p-4 w-16 text-center rounded-tl-lg">ลำดับ</th>
+                    <th class="p-4 w-40">รหัสนักศึกษา</th>
+                    <th class="p-4 rounded-tr-lg">ชื่อ-นามสกุล</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                ${students.map((s, i) => `
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="p-4 text-center text-gray-400 font-bold">${i+1}</td>
+                        <td class="p-4 font-bold text-cra-secondary tracking-wide">${s[1] && s[1] !== 'ไม่ทราบ' ? String(s[1]).replace(/^'/, '') : '<span class="text-orange-500 bg-orange-50 px-2 py-0.5 rounded-md text-xs">ไม่ทราบรหัส</span>'}</td>
+                        <td class="p-4 text-gray-700 font-medium">${s[2] || '-'}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table></div>`;
+        
+        document.getElementById('mBody').innerHTML = html;
+        document.getElementById('mFooter').innerHTML = `<p class="text-sm text-gray-500 font-bold">รวมผู้เข้าศึกษา: <span class="text-cra-secondary text-lg">${students.length}</span> คน</p>`;
+        document.getElementById('modalBase').classList.remove('hidden');
+    }
+
+    /* 🌟 ระบบข้อมูลโรงเรียน (จัดหน้า และ จังหวัด) 🌟 */
+    function processSchoolData(data) {
+        let counts = {};
+        let provs = {};
+        data.forEach(r => {
+            let sch = String(r[6] || '').trim();
+            let prov = String(r[7] || '').trim();
+            if(sch && sch !== "-") {
+                counts[sch] = (counts[sch] || 0) + 1;
+                provs[sch] = prov;
+            }
+        });
+        let sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+        SCHOOL_DATA = sorted.map((it, idx) => ({
+            rank: idx + 1,
+            name: it[0],
+            prov: provs[it[0]],
+            count: it[1],
+            percent: ((it[1] / data.length) * 100).toFixed(2)
+        }));
+        schoolCurrentPage = 1;
+        renderSchoolTable();
+    }
+
+    function renderSchoolTable() {
+        let totalPages = Math.ceil(SCHOOL_DATA.length / schoolPerPage) || 1;
+        let start = (schoolCurrentPage - 1) * schoolPerPage;
+        let end = start + schoolPerPage;
+        let pageData = SCHOOL_DATA.slice(start, end);
+
+        const medals = [
+          '<div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mx-auto text-yellow-600 font-bold shadow-sm border border-yellow-200">1</div>',
+          '<div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mx-auto text-gray-500 font-bold shadow-sm border border-gray-200">2</div>',
+          '<div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mx-auto text-orange-600 font-bold shadow-sm border border-orange-200">3</div>'
+        ];
+
+        document.getElementById('schoolTableBody').innerHTML = pageData.map((it) => {
+            let isTop3 = it.rank <= 3;
+            let icon = isTop3 ? medals[it.rank - 1] : `<span class="font-bold text-gray-400">${it.rank}</span>`;
+            let rowStyle = "";
+            if(it.rank === 1) rowStyle = "bg-orange-50/60";
+            else if(it.rank === 2) rowStyle = "bg-gray-50/60";
+            else if(it.rank === 3) rowStyle = "bg-amber-50/30";
+
+            return `<tr class="${rowStyle} hover:bg-blue-50 transition-colors">
+                <td class="p-3 text-center align-middle">${icon}</td>
+                <td class="p-3 font-bold text-gray-700">
+                    ${it.name}
+                    ${it.prov && it.prov !== '-' ? `<span class="inline-block bg-blue-50 text-blue-600 text-[10px] px-2.5 py-0.5 rounded-full ml-2 border border-blue-100 uppercase tracking-wide">จ.${it.prov}</span>` : ''}
+                </td>
+                <td class="p-3 text-right font-black text-cra-secondary text-lg">${it.count}</td>
+                <td class="p-3 text-right text-gray-500 font-bold">${it.percent}%</td>
+            </tr>`;
+        }).join('');
+
+        document.getElementById('schoolPagination').innerHTML = `
+            <button onclick="changeSchoolPage(-1)" class="px-4 py-2 text-sm font-bold rounded-xl bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition disabled:opacity-50" ${schoolCurrentPage === 1 ? 'disabled' : ''}><i class="fi fi-sr-angle-small-left"></i> ก่อนหน้า</button>
+            <span class="text-sm font-bold text-gray-500 bg-gray-50 px-4 py-1.5 rounded-lg border border-gray-200">หน้า ${schoolCurrentPage} จาก ${totalPages}</span>
+            <button onclick="changeSchoolPage(1)" class="px-4 py-2 text-sm font-bold rounded-xl bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition disabled:opacity-50" ${schoolCurrentPage === totalPages ? 'disabled' : ''}>ถัดไป <i class="fi fi-sr-angle-small-right"></i></button>
+        `;
+    }
+
+    function changeSchoolPage(dir) {
+        let totalPages = Math.ceil(SCHOOL_DATA.length / schoolPerPage) || 1;
+        schoolCurrentPage += dir;
+        if(schoolCurrentPage < 1) schoolCurrentPage = 1;
+        if(schoolCurrentPage > totalPages) schoolCurrentPage = totalPages;
+        renderSchoolTable();
     }
 
     function renderPieSections(data, total) {
       const container = document.getElementById('pieCardContainer'); container.innerHTML = '';
       const items = [
         { id: 'Gender', col: 3, title: 'สัดส่วนเพศ', ic: 'fi-sr-venus-mars' }, 
-        { id: 'Tcas', col: 4, title: 'รอบ TCAS ที่สอบติด', ic: 'fi-sr-bullseye-pointer' }, 
-        { id: 'Page', col: 9, title: 'ติดตามเพจ Education CRA', ic: 'fi-sr-social-network' }
+        { id: 'Tcas', col: 4, title: 'รอบ TCAS ที่สอบติด', ic: 'fi-sr-bullseye-pointer' }
       ];
       items.forEach(p => {
         const div = document.createElement('div'); div.className = "glass-card p-6 flex flex-col";
@@ -371,17 +493,13 @@
     }
 
     function openCustomModal(type) {
-      let data = RAW_DATA;
-      if(filterCourse !== "All") data = data.filter(r => String(r[0]).trim() === filterCourse);
-      if(filterRound !== "All") data = data.filter(r => String(r[4]).trim() === filterRound);
-
       if (type === 'activity') {
           document.getElementById('mHeader').innerHTML = `<i class="fi fi-sr-calendar-star text-orange-500"></i> กิจกรรมที่อยากให้จัดในอนาคต`;
-          const list = data.map(r => r[11]).filter(v => v && v.toString().trim() !== "-" && v.toString().trim() !== "ไม่มี" && v.toString().length > 2);
+          const list = FILTERED_DATA.map(r => r[11]).filter(v => v && v.toString().trim() !== "-" && v.toString().trim() !== "ไม่มี" && v.toString().length > 2);
           document.getElementById('mBody').innerHTML = list.length ? `<ul class="space-y-3">${list.map(v => `<li class="p-4 bg-orange-50/50 rounded-xl border border-orange-100 flex items-start gap-3 text-sm text-slate-700 font-medium"><i class="fi fi-sr-quote-right text-orange-400 mt-0.5"></i> <span class="leading-relaxed">${v}</span></li>`).join('')}</ul>` : '<p class="text-center text-gray-400 py-10 font-bold">ไม่มีข้อมูลในเงื่อนไขนี้</p>';
       } else {
           document.getElementById('mHeader').innerHTML = `<i class="fi fi-sr-comment-alt text-blue-500"></i> ข้อเสนอแนะเพิ่มเติม`;
-          const list = data.map(r => r[12]).filter(v => v && v.toString().trim() !== "-" && v.toString().trim() !== "ไม่มี" && v.toString().length > 2);
+          const list = FILTERED_DATA.map(r => r[12]).filter(v => v && v.toString().trim() !== "-" && v.toString().trim() !== "ไม่มี" && v.toString().length > 2);
           document.getElementById('mBody').innerHTML = list.length ? `<ul class="space-y-3">${list.map(v => `<li class="p-4 bg-blue-50/50 rounded-xl border border-blue-100 flex items-start gap-3 text-sm text-slate-700 font-medium"><i class="fi fi-sr-quote-right text-blue-400 mt-0.5"></i> <span class="leading-relaxed">${v}</span></li>`).join('')}</ul>` : '<p class="text-center text-gray-400 py-10 font-bold">ไม่มีข้อมูลในเงื่อนไขนี้</p>';
       }
       
