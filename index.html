@@ -129,7 +129,7 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     
-    /* Simple Loader (Replacing the complex SVG one to prevent issues) */
+    /* Simple Loader (Replacing the complex one to prevent issues) */
     .loader {
         border: 3px solid rgba(255,255,255,0.3);
         border-radius: 50%;
@@ -139,6 +139,7 @@
         -webkit-animation: spin 1s linear infinite; /* Safari */
         animation: spin 1s linear infinite;
         display: inline-block;
+        vertical-align: middle;
     }
 
     /* Green Loader for the Claim Button */
@@ -414,7 +415,7 @@
 
                   <div class="flex justify-between pt-8 border-t border-gray-200 mt-6">
                       <button type="button" onclick="prevStep(3)" class="px-6 py-2.5 text-gray-500 hover:text-[#f26b21] font-bold transition">ย้อนกลับ</button>
-                      <button type="button" onclick="submitData()" id="btnSubmit" class="btn-orange px-10 py-4 font-black flex items-center gap-2 shadow-lg text-lg">ส่งข้อมูลแบบสำรวจ</button>
+                      <button type="button" onclick="submitData()" id="btnSubmit" class="btn-orange px-10 py-4 font-black flex items-center justify-center gap-2 shadow-lg text-lg min-w-[200px]">ส่งข้อมูลแบบสำรวจ</button>
                   </div>
               </div>
           </form>
@@ -732,13 +733,22 @@ function submitData(overwrite = false) {
         futureAct: futureAct, suggestion: suggestion, overwrite: overwrite
     };
 
-    let btn = document.getElementById('btnSubmit'); let originTxt = btn.innerHTML;
-    btn.innerHTML = '<span class="loader-gray mr-3"></span> กำลังบันทึกข้อมูล...'; btn.disabled = true;
+    let btn = document.getElementById('btnSubmit'); 
+    let originTxt = btn.innerHTML; // เก็บข้อความเดิมไว้ (เช่น "ส่งข้อมูลแบบสำรวจ")
+    
+    // เปลี่ยนข้อความและใส่ Loader แบบง่ายๆ ที่เพิ่งสร้างใหม่
+    btn.innerHTML = '<span class="loader mr-2"></span> กำลังบันทึก...'; 
+    btn.disabled = true;
+    btn.classList.add('opacity-80', 'cursor-not-allowed'); // ทำให้ปุ่มดูเหมือนถูกกดไม่ได้
 
     fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "submitSurvey", payload: payload }) })
     .then(r => r.json())
     .then(res => {
-        btn.innerHTML = originTxt; btn.disabled = false;
+        // คืนค่าปุ่มกลับมาเหมือนเดิม
+        btn.innerHTML = originTxt; 
+        btn.disabled = false;
+        btn.classList.remove('opacity-80', 'cursor-not-allowed');
+
         if (res.status === 'success') {
             document.getElementById('surveyForm').classList.add('hidden'); 
             document.getElementById('formStepper').classList.add('hidden');
@@ -930,9 +940,11 @@ function claimPrizeBtn() {
             let btnIcon = document.getElementById('modalBtnIcon');
             let btnText = document.getElementById('modalBtnText');
 
-            btnIcon.className = "loader mr-1"; // ใช้ Loader แบบปกติแล้ว
+            // ใช้ Loader ตัวใหม่ที่สร้างไว้
+            btnIcon.className = "loader mr-1"; 
             btnText.innerText = " กำลังอัปเดต...";
             btn.disabled = true;
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
 
             fetch(API_URL, {
                 method: "POST",
@@ -940,6 +952,8 @@ function claimPrizeBtn() {
             })
             .then(r => r.json())
             .then(res => {
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                
                 if(res.status === 'success') {
                     window.claimStatus = 'CLAIMED';
                     btnIcon.className = "fi fi-sr-checkbox mt-1";
@@ -954,6 +968,7 @@ function claimPrizeBtn() {
                 }
             })
             .catch(err => {
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
                 Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้', 'error');
                 btnIcon.className = "fi fi-sr-hand-holding-box mt-1";
                 btnText.innerText = "กดใช้สิทธิ์รับรางวัล";
@@ -965,7 +980,10 @@ function claimPrizeBtn() {
 
 function goToMedia() {
     let btn = document.querySelector('#successView button:last-child');
-    btn.innerHTML = '<span class="loader mr-3"></span> กำลังพาท่านไป...'; btn.disabled = true;
+    // ใช้ Loader วงกลมแบบเดียวกันสำหรับปุ่มพาท่านไป...
+    btn.innerHTML = '<span class="loader mr-3"></span> กำลังพาท่านไป...'; 
+    btn.disabled = true;
+    btn.classList.add('opacity-80', 'cursor-not-allowed');
     window.location.href = "media.html";
 }
 </script>
