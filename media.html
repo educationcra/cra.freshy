@@ -14,31 +14,72 @@
         font-family: 'Noto Sans Thai', sans-serif; 
         min-height: 100vh; 
         overflow-x: hidden;
-        background: linear-gradient(-45deg, #003380, #004aad, #001f4d, #002255);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
+        /* ใช้พื้นหลังลวดลายที่ผู้ใช้กำหนด ปรับสีให้เป็นโทนน้ำเงิน */
+        background-color: #003380; /* สีพื้นหลังฐาน */
+        background-repeat: repeat;
+        background-position: 50% 50%;
+        background-size: 154px 265px;
+        background-image: conic-gradient(
+            from 0deg at 92.66% 50%,
+            #004aad 0 120deg, /* สีน้ำเงินสว่าง */
+            #fff0 0 100%
+          ),
+          conic-gradient(from -60deg at 81.66% 10.25%, #004aad 0 180deg, #fff0 0 100%),
+          conic-gradient(from -60deg at 66.66% 22.25%, #005ce6 0 120deg, #fff0 0 100%), /* สีน้ำเงินสด */
+          conic-gradient(from 0deg at 71.66% 43%, #002255 0 120deg, #fff0 0 100%), /* สีน้ำเงินเข้ม */
+          conic-gradient(from 0deg at 66.66% 45.95%, #002255 0 60deg, #fff0 0 100%),
+          conic-gradient(from 120deg at 25% 91.5%, #005ce6 0 120deg, #fff0 0 100%),
+          conic-gradient(from 180deg at 16% 73.5%, #004aad 0 120deg, #fff0 0 100%),
+          conic-gradient(from 180deg at 16% 73.5%, #004aad 0 120deg, #fff0 0 100%),
+          conic-gradient(from 180deg at 16% 73.5%, #004aad 0 120deg, #fff0 0 100%),
+          conic-gradient(from 180deg at 16% 73.5%, #004aad 0 120deg, #fff0 0 100%),
+          conic-gradient(
+            from 180deg at 39.5% 65.65%,
+            #002255 0 60deg,
+            #005ce6 0 120deg,
+            #fff0 0 100%
+          ),
+          conic-gradient(
+            from 180deg at 39.5% 65.65%,
+            #002255 0 60deg,
+            #005ce6 0 120deg,
+            #fff0 0 100%
+          ),
+          conic-gradient(
+            from 180deg at 39.5% 65.65%,
+            #002255 0 60deg,
+            #005ce6 0 120deg,
+            #fff0 0 100%
+          ),
+          conic-gradient(
+            from 180deg at 39.5% 65.65%,
+            #002255 0 60deg,
+            #005ce6 0 120deg,
+            #fff0 0 100%
+          ),
+          conic-gradient(
+            from 60deg at 50% 51.5%,
+            #005ce6 0 60deg,
+            #004aad 0 120deg,
+            #002b80 0 100% /* สีน้ำเงินเข้มเชื่อม */
+          );
         color: #ffffff;
     }
 
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    
     /* วงกลมตกแต่งพื้นหลัง */
     .blob {
-        position: fixed; filter: blur(80px); z-index: -1; opacity: 0.5; border-radius: 50%;
+        position: fixed; filter: blur(80px); z-index: -1; opacity: 0.3; border-radius: 50%;
     }
     .blob-1 { top: -10%; left: -10%; width: 300px; height: 300px; background: #f26b21; }
     .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #00aaff; }
 
     .glass-container {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        /* ปรับให้ทึบขึ้นเล็กน้อยเพื่อให้อ่านง่ายบนพื้นหลังลาย */
+        background: rgba(255, 255, 255, 0.15); 
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
     .link-card {
@@ -120,7 +161,7 @@
       </div>
       
       <h1 class="text-2xl font-black text-white mb-1 tracking-wide drop-shadow-md text-center">ช่องทางติดตามข่าวสาร</h1>
-      <p class="text-blue-100 font-medium text-sm mb-8 text-center px-2">
+      <p class="text-blue-50 font-medium text-sm mb-8 text-center px-2">
           รวมช่องทางการติดต่อและประชาสัมพันธ์<br>ของราชวิทยาลัยจุฬาภรณ์
       </p>
 
@@ -128,9 +169,9 @@
           <!-- SECTION 1: Education CRA -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2">เพจ Education CRA</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 drop-shadow">เพจ Education CRA</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -172,9 +213,9 @@
           <!-- SECTION 2: เพจส่วนกลาง (CRA) -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2">เพจส่วนกลาง (CRA)</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 drop-shadow">เพจส่วนกลาง (CRA)</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -256,9 +297,9 @@
           <!-- SECTION 3: คณะแพทยศาสตร์ศรีสวางควัฒน -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight">คณะแพทยศาสตร์<br>ศรีสวางควัฒน</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight drop-shadow">คณะแพทยศาสตร์<br>ศรีสวางควัฒน</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -284,9 +325,9 @@
           <!-- SECTION 4: คณะพยาบาลศาสตร์อัครราชกุมารี -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight">คณะพยาบาลศาสตร์<br>อัครราชกุมารี</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight drop-shadow">คณะพยาบาลศาสตร์<br>อัครราชกุมารี</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -304,9 +345,9 @@
           <!-- SECTION 5: คณะเทคโนโลยีวิทยาศาสตร์สุขภาพ -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight">คณะเทคโนโลยี<br>วิทยาศาสตร์สุขภาพ</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight drop-shadow">คณะเทคโนโลยี<br>วิทยาศาสตร์สุขภาพ</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -348,9 +389,9 @@
           <!-- SECTION 6: คณะวิทยาศาสตร์ -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight">คณะวิทยาศาสตร์</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight drop-shadow">คณะวิทยาศาสตร์</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -368,9 +409,9 @@
           <!-- SECTION 7: คณะนวัตกรรมอาหารและโภชนาการ -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight">คณะนวัตกรรมอาหาร<br>และโภชนาการ</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight drop-shadow">คณะนวัตกรรมอาหาร<br>และโภชนาการ</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -388,9 +429,9 @@
           <!-- SECTION 8: คณะวิศวกรรมศาสตร์ -->
           <div>
               <div class="flex items-center gap-3 mb-4 opacity-90">
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
-                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight">คณะวิศวกรรมศาสตร์</h2>
-                  <div class="h-[1px] flex-1 bg-white/30"></div>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
+                  <h2 class="text-xs font-bold text-white uppercase tracking-widest px-2 text-center leading-tight drop-shadow">คณะวิศวกรรมศาสตร์</h2>
+                  <div class="h-[1px] flex-1 bg-white/40"></div>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
