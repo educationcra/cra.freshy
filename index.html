@@ -207,7 +207,7 @@
                   </div>
                   
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 relative z-[60]">
-                    <div class="md:col-span-1 relative z-[59]">
+                      <div class="md:col-span-1 relative z-[59]">
                           <label class="block text-sm font-bold mb-2 text-gray-700">รอบที่สอบติด TCAS <span class="text-red-500">*</span></label>
                           <div id="tcasWrapper"></div><input type="hidden" id="tcasRound">
                       </div>
@@ -272,22 +272,22 @@
                   </div>
 
                   <div class="bg-gray-50 p-6 lg:p-8 rounded-2xl border border-gray-200 shadow-sm relative z-50">
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                          <div class="relative z-[60]">
-                              <label class="block text-sm font-bold mb-2 text-[#003380]">โรงเรียนที่จบระดับชั้น ม.6 หรือ เทียบเท่า <span class="text-red-500">*</span></label>
-                              <div class="group-input relative">
-                                  <i class="fi fi-rr-search icon-input top-1/2 transform -translate-y-1/2 text-xl mt-0.5 z-10"></i>
-                                  <input type="text" id="schoolInputSearch" class="input-custom with-icon" autocomplete="off" placeholder="พิมพ์ชื่อโรงเรียนเพื่อค้นหา..." oninput="fastSearchSchool(this.value)">
-                              </div>
-                              <ul id="schoolDropdown"></ul>
+                      <!-- โรงเรียน -->
+                      <div class="relative w-full z-[60]">
+                          <label class="block text-sm font-bold mb-2 text-[#003380]">โรงเรียนที่จบระดับชั้น ม.6 หรือ เทียบเท่า <span class="text-red-500">*</span></label>
+                          <div class="relative w-full">
+                              <i class="fi fi-sr-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                              <input type="text" id="schoolInputSearch" class="w-full h-[45px] pl-12 pr-4 bg-[#f8fafc] border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-400 focus:shadow-[0_0_0_5px_rgba(59,130,246,0.3)] transition-all outline-none font-medium text-gray-700" autocomplete="off" placeholder="พิมพ์ชื่อโรงเรียนเพื่อค้นหา..." oninput="fastSearchSchool(this.value)" onfocus="fastSearchSchool(this.value)">
+                              <ul id="schoolDropdown" class="absolute z-50 w-full bg-white border border-gray-100 rounded-xl mt-1 max-h-48 overflow-y-auto hidden shadow-xl"></ul>
                           </div>
-                          <div class="relative z-[59]">
-                              <label class="block text-sm font-bold mb-2 text-[#003380]">จังหวัดของโรงเรียน <span class="text-red-500">*</span></label>
-                              <div class="group-input relative">
-                                  <i id="provIcon" class="fi fi-rr-marker icon-input top-1/2 transform -translate-y-1/2 text-xl mt-0.5 z-10 text-gray-400 hidden"></i>
-                                  <input type="text" id="provinceInput" class="input-custom bg-gray-200 text-gray-500 font-medium cursor-not-allowed border-gray-200 focus:border-gray-200" placeholder="จังหวัดจะขึ้นอัตโนมัติเมื่อเลือกโรงเรียน" readonly oninput="fastSearchProvince(this.value)" onfocus="if(!this.readOnly) fastSearchProvince(this.value)">
-                              </div>
-                              <ul id="provinceDropdown"></ul>
+                      </div>
+                      <!-- จังหวัด -->
+                      <div class="relative w-full z-[59]">
+                          <label class="block text-sm font-bold mb-2 text-[#003380]">จังหวัดของโรงเรียน <span class="text-red-500">*</span></label>
+                          <div class="relative w-full">
+                              <i id="provIcon" class="fi fi-sr-marker absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                              <input type="text" id="provinceInput" class="w-full h-[45px] pl-12 pr-4 bg-[#f8fafc] border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-400 focus:shadow-[0_0_0_5px_rgba(59,130,246,0.3)] transition-all outline-none font-medium text-gray-700" autocomplete="off" placeholder="พิมพ์เพื่อค้นหาจังหวัด..." oninput="fastSearchProvince(this.value)" onfocus="fastSearchProvince(this.value)">
+                              <ul id="provinceDropdown" class="absolute z-50 w-full bg-white border border-gray-100 rounded-xl mt-1 max-h-48 overflow-y-auto hidden shadow-xl"></ul>
                           </div>
                       </div>
                   </div>
@@ -609,13 +609,70 @@ window.onload = function() {
 
     function fastSearchSchool(val) {
         let box = document.getElementById('schoolDropdown'); box.innerHTML = '';
-        if (val.trim().length < 2) { box.classList.remove('show'); return; }
+        if (val.trim().length < 2) { box.classList.add('hidden'); return; }
 
         let results = [];
         for(let i=0; i<rawSchoolData.length; i++){
             if(rawSchoolData[i][0].toLowerCase().indexOf(val.toLowerCase()) > -1) results.push(rawSchoolData[i]);
             if(results.length >= 10) break; 
         }
+        
+        if (results.length > 0) {
+            for(let j=0; j<results.length; j++){
+                let li = document.createElement('li');
+                li.className = "px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-[#f0f7ff] transition-colors border-b border-gray-50 last:border-0";
+                li.innerHTML = '<div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0"><i class="fi fi-sr-school text-[#004aad] text-xs mt-0.5"></i></div><span class="truncate flex-1 font-bold text-gray-700">' + results[j][0] + '</span> <span class="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded-md shrink-0 border border-gray-200">จ.' + results[j][1] + '</span>';
+                li.onclick = function(e) {
+                    e.stopPropagation(); 
+                    document.getElementById('schoolInputSearch').value = results[j][0];
+                    document.getElementById('provinceInput').value = results[j][1];
+                    box.classList.add('hidden');
+                };
+                box.appendChild(li);
+            }
+        } else {
+            let li = document.createElement('li');
+            li.className = "px-4 py-4 text-center cursor-pointer hover:bg-orange-50 transition-colors";
+            li.innerHTML = '<span class="text-gray-500 text-sm font-medium">ไม่พบชื่อโรงเรียนนี้</span><br><span class="text-xs font-bold text-[#f26b21] mt-1 inline-block"><i class="fi fi-sr-add"></i> พิมพ์ชื่อโรงเรียนใหม่ลงไปได้เลยครับ</span>';
+            li.onclick = function(e) { 
+                e.stopPropagation(); 
+                box.classList.add('hidden'); 
+                document.getElementById('provinceInput').focus();
+            }
+            box.appendChild(li);
+        }
+        box.classList.remove('hidden');
+    }
+
+    function fastSearchProvince(val) {
+        let box = document.getElementById('provinceDropdown'); box.innerHTML = '';
+        let results = [];
+        let search = val.trim().toLowerCase();
+        
+        for(let i=0; i<provincesList.length; i++){
+            if(search === "" || provincesList[i].indexOf(search) > -1) results.push(provincesList[i]);
+        }
+        
+        if (results.length > 0) {
+            for(let j=0; j<results.length; j++){
+                let li = document.createElement('li');
+                li.className = "px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-[#f0f7ff] transition-colors border-b border-gray-50 last:border-0";
+                li.innerHTML = '<div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0"><i class="fi fi-sr-marker text-gray-500 text-xs mt-0.5"></i></div> <span class="truncate flex-1 font-bold text-gray-700">' + results[j] + '</span>';
+                li.onclick = function(e) {
+                    e.stopPropagation(); 
+                    document.getElementById('provinceInput').value = results[j];
+                    box.classList.add('hidden');
+                };
+                box.appendChild(li);
+            }
+        } else {
+            let li = document.createElement('li');
+            li.className = "px-4 py-4 text-center";
+            li.innerHTML = '<span class="text-gray-500 text-sm font-medium">ไม่พบชื่อจังหวัดนี้</span>';
+            box.appendChild(li);
+        }
+        box.classList.remove('hidden');
+    }
         
         if (results.length > 0) {
             for(let j=0; j<results.length; j++){
