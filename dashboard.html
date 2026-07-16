@@ -39,6 +39,16 @@
     
     .loader { border: 4px solid #f3f3f3; border-top: 4px solid #f26b21; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* Custom Select Styles สำหรับ Dashboard */
+    .custom-select-wrapper { position: relative; width: 100%; user-select: none; }
+    .custom-select-trigger { width: 100%; height: 50px; padding: 0 1rem; border: 2px solid #e2e8f0; border-radius: 0.75rem; background-color: #f8fafc; color: #334155; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: .3s ease; font-weight: 600; }
+    .custom-select-trigger:focus, .custom-select-trigger.active-trigger { border-color: rgba(242, 107, 33, 0.4); background-color: #fff; box-shadow: 0 0 0 4px rgba(242, 107, 33, 0.1); }
+    .custom-options { position: absolute; width: 100%; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.75rem; margin-top: 6px; max-height: 240px; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 0.4rem; z-index: 100; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.2s ease; transform: translateY(-10px); }
+    .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+    .custom-option { padding: 0.75rem 1rem; cursor: pointer; transition: all 0.15s ease; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 500; color: #475569; margin-bottom: 2px; }
+    .custom-option:hover { background-color: #fff8f0; color: #f26b21; }
+    .custom-option.selected { background-color: #fff8f0; color: #f26b21; font-weight: 700; }
   </style>
 </head>
 <body class="text-slate-800 antialiased">
@@ -108,8 +118,8 @@
       </div>
     </div>
 
-    <!-- ตารางโรงเรียน (แบ่งหน้า และไฮไลท์ Top 3) -->
-    <div class="glass-card p-8 mb-8">
+    <!-- ตารางโรงเรียน (ซ่อนถ้าเป็น โท/เอก) -->
+    <div id="schoolTableSection" class="glass-card p-8 mb-8 transition-all">
       <h3 class="text-xl font-black text-cra-secondary mb-6 flex items-center gap-3">
         <i class="fi fi-sr-school text-cra-primary text-2xl"></i> โรงเรียนและสถานศึกษาเดิม
       </h3>
@@ -130,7 +140,7 @@
     </div>
 
     <!-- โซเชียลมีเดีย: ติดตามเพจ + แพลตฟอร์ม -->
-    <div id="socialMediaContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"></div>
+    <div id="socialMediaContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"></div>
 
     <!-- ตารางแยก: เหตุผล และ ช่องทาง -->
     <div class="glass-card p-8 mb-8">
@@ -184,13 +194,64 @@
     Chart.register(ChartDataLabels);
     
     let RAW_DATA = [];
-    let FILTERED_DATA = []; // ข้อมูลที่ผ่านการกรอง
-    let SCHOOL_DATA = []; // ข้อมูลโรงเรียน
+    let FILTERED_DATA = []; 
+    let SCHOOL_DATA = []; 
+    
+    let filterDegree = "All"; // เพิ่มตัวแปรเก็บระดับการศึกษา
     let filterCourse = "All"; 
     let filterRound = "All"; 
     
     let schoolCurrentPage = 1;
     const schoolPerPage = 10;
+
+    // Helper Functions สำหรับ Custom Select
+    function buildDashSelect(wrapId, inputId, opts, currentVal, onChange) {
+        const wrap = document.getElementById(wrapId); const inp = document.getElementById(inputId);
+        let displayVal = currentVal === "All" ? "ทั้งหมด / ทุกรายการ" : currentVal;
+        
+        let html = `<div class="custom-select-trigger"><span class="truncate sel-text">${displayVal}</span><i class="fi fi-sr-caret-down text-gray-400"></i></div>`;
+        html += `<div class="custom-options">`;
+        html += `<div class="custom-option ${currentVal==="All"?'selected':''}" data-val="All">ทั้งหมด / ทุกรายการ</div>`;
+        opts.forEach(o => {
+            let isSel = currentVal === o;
+            html += `<div class="custom-option ${isSel?'selected':''}" data-val="${o}">${o}</div>`;
+        });
+        html += `</div>`;
+        wrap.innerHTML = html;
+        
+        const trigger = wrap.querySelector('.custom-select-trigger');
+        const txt = trigger.querySelector('.sel-text');
+        const options = wrap.querySelectorAll('.custom-option');
+        
+        trigger.onclick = (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => { if(w !== wrap) w.classList.remove('open'); });
+            wrap.classList.toggle('open');
+            trigger.classList.toggle('active-trigger');
+        };
+        
+        options.forEach(opt => {
+            opt.onclick = (e) => {
+                e.stopPropagation();
+                options.forEach(el => el.classList.remove('selected'));
+                opt.classList.add('selected');
+                let val = opt.getAttribute('data-val');
+                inp.value = val;
+                txt.innerText = val === "All" ? "ทั้งหมด / ทุกรายการ" : val;
+                wrap.classList.remove('open');
+                trigger.classList.remove('active-trigger');
+                if(onChange) onChange(val);
+            };
+        });
+    }
+
+    document.addEventListener('click', () => { 
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+            w.classList.remove('open');
+            let trigger = w.querySelector('.custom-select-trigger');
+            if(trigger) trigger.classList.remove('active-trigger');
+        }); 
+    });
 
     window.onload = async () => {
       try {
@@ -202,7 +263,12 @@
         const json = await res.json();
         
         if(json.status === 'success') {
-            RAW_DATA = json.data;
+            // การทำ Backward Compatibility: หากข้อมูลเดิมไม่มีคอลัมน์ 16 (ระดับการศึกษา) ให้เหมาว่าเป็น ปริญญาตรี
+            RAW_DATA = json.data.map(r => {
+                let row = [...r];
+                if(!row[16]) row[16] = "ปริญญาตรี";
+                return row;
+            });
             renderDashboard();
             document.getElementById('loading').classList.add('opacity-0');
             setTimeout(() => {
@@ -224,39 +290,63 @@
     }
 
     function renderDashboard() {
-      let data = RAW_DATA;
-      // กรองข้อมูล
-      if(filterCourse !== "All") data = data.filter(r => String(r[0]).trim() === filterCourse);
-      if(filterRound !== "All") data = data.filter(r => String(r[4]).trim() === filterRound);
+      let data = [...RAW_DATA];
       
-      FILTERED_DATA = data; // อัปเดตข้อมูล Global
+      // กรองตามระดับการศึกษา (Index 16)
+      if(filterDegree !== "All") data = data.filter(r => String(r[16]).trim() === filterDegree);
+      
+      // กรองตามหลักสูตร (Index 0)
+      if(filterCourse !== "All") data = data.filter(r => String(r[0]).trim() === filterCourse);
+      
+      // กรองตามรอบ TCAS (ใช้ได้เฉพาะเมื่อเป็น All หรือ ป.ตรี เท่านั้น)
+      if((filterDegree === "ปริญญาตรี" || filterDegree === "All") && filterRound !== "All") {
+          data = data.filter(r => String(r[4]).trim() === filterRound);
+      }
+      
+      FILTERED_DATA = data;
       const total = data.length;
       
+      // สร้าง Title สำหรับแสดงเงื่อนไขที่เลือก
       let titleTxt = "ข้อมูลผู้ตอบแบบสำรวจทั้งหมด";
-      if(filterCourse !== "All" || filterRound !== "All") {
-          let cTxt = filterCourse !== "All" ? filterCourse : "ทุกหลักสูตร";
-          let rTxt = filterRound !== "All" ? filterRound : "ทุกรอบ";
-          titleTxt = `ข้อมูลกรองตาม: <span class="text-cra-primary">${cTxt}</span> | <span class="text-cra-primary">${rTxt}</span>`;
+      let filterCount = 0;
+      let tags = [];
+      if(filterDegree !== "All") { tags.push(filterDegree); filterCount++; }
+      if(filterCourse !== "All") { tags.push(filterCourse); filterCount++; }
+      if((filterDegree === "ปริญญาตรี" || filterDegree === "All") && filterRound !== "All") { tags.push(filterRound); filterCount++; }
+      
+      if(tags.length > 0) {
+          titleTxt = `ตัวกรอง: ` + tags.map(t => `<span class="bg-blue-50 text-cra-secondary px-3 py-1 rounded-lg border border-blue-100">${t}</span>`).join(' ');
       }
+      
       document.getElementById('titleText').innerHTML = titleTxt;
       document.getElementById('kpiTotal').innerText = total.toLocaleString();
-      
-      let fCount = (filterCourse !== "All" ? 1 : 0) + (filterRound !== "All" ? 1 : 0);
-      document.getElementById('filterCountBadge').innerText = fCount > 0 ? fCount : 'ทั้งหมด';
+      document.getElementById('filterCountBadge').innerText = filterCount > 0 ? filterCount : 'ทั้งหมด';
 
       if(total === 0) {
-          Swal.fire({icon:'info', title:'ไม่พบข้อมูล', text:'ไม่มีผู้ตอบแบบสำรวจในเงื่อนไขที่เลือก'});
+          Swal.fire({icon:'info', title:'ไม่พบข้อมูล', text:'ไม่มีผู้ตอบแบบสำรวจในเงื่อนไขที่เลือก', confirmButtonColor: '#f26b21'});
+          // Clear views if no data
+          document.getElementById('pieCardContainer').innerHTML = '';
+          document.getElementById('currTableBody').innerHTML = '<tr><td colspan="5" class="text-center p-4 text-gray-500">ไม่มีข้อมูล</td></tr>';
+          document.getElementById('schoolTableSection').classList.add('hidden');
           return;
       }
 
-      // Render Charts & Tables
+      // 1. Render Pie Charts (Dynamic Tcas visibility)
       renderPieSections(data, total);
+      
+      // 2. Render Course Table
       renderCourseTable('currTableBody', getCounts(data, 0, false), total); 
 
-      // Render Schools
-      processSchoolData(data);
+      // 3. Render School Table (Show only if Degree is All or Bachelor)
+      const schoolSec = document.getElementById('schoolTableSection');
+      if (filterDegree === "ปริญญาตรี" || filterDegree === "All") {
+          schoolSec.classList.remove('hidden');
+          processSchoolData(data);
+      } else {
+          schoolSec.classList.add('hidden');
+      }
 
-      // Render Social Media Container (ติดตามเพจ + แพลตฟอร์ม)
+      // 4. Render Social Media Container
       const socialContainer = document.getElementById('socialMediaContainer'); socialContainer.innerHTML = '';
       const socialItems = [
           { id: 'Page', col: 9, title: 'ติดตามเพจ Education CRA', icon: 'fi-sr-social-network', type: 'pie' },
@@ -268,6 +358,7 @@
           socialContainer.appendChild(div); renderChart(`c${c.id}`, c.type, getCounts(data, c.col, false), total);
       });
 
+      // 5. Render Split Tables & Suggestions
       renderSplitTables(data, total);
       renderPrintData(data);
     }
@@ -289,7 +380,6 @@
         return sorted;
     }
 
-    /* 🌟 ตารางหลักสูตร แบบใหม่ 🌟 */
     function renderCourseTable(containerId, data, total) {
       document.getElementById(containerId).innerHTML = data.map((it, i) => {
         let p = preciseRound(it[1]*100/total, 2).toFixed(2);
@@ -303,7 +393,6 @@
       }).join('');
     }
 
-    /* 🌟 เปิดดูรายชื่อนักศึกษาในหลักสูตร 🌟 */
     function openCourseStudentsModal(courseName) {
         document.getElementById('mHeader').innerHTML = `<i class="fi fi-sr-graduation-cap text-cra-secondary"></i> ผู้ที่ศึกษาใน: ${courseName}`;
         
@@ -333,7 +422,6 @@
         document.getElementById('modalBase').classList.remove('hidden');
     }
 
-    /* 🌟 ระบบข้อมูลโรงเรียน (จัดหน้า และ จังหวัด) 🌟 */
     function processSchoolData(data) {
         let counts = {};
         let provs = {};
@@ -347,11 +435,8 @@
         });
         let sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
         SCHOOL_DATA = sorted.map((it, idx) => ({
-            rank: idx + 1,
-            name: it[0],
-            prov: provs[it[0]],
-            count: it[1],
-            percent: ((it[1] / data.length) * 100).toFixed(2)
+            rank: idx + 1, name: it[0], prov: provs[it[0]],
+            count: it[1], percent: ((it[1] / data.length) * 100).toFixed(2)
         }));
         schoolCurrentPage = 1;
         renderSchoolTable();
@@ -405,10 +490,16 @@
 
     function renderPieSections(data, total) {
       const container = document.getElementById('pieCardContainer'); container.innerHTML = '';
-      const items = [
-        { id: 'Gender', col: 3, title: 'สัดส่วนเพศ', ic: 'fi-sr-venus-mars' }, 
-        { id: 'Tcas', col: 4, title: 'รอบ TCAS ที่สอบติด', ic: 'fi-sr-bullseye-pointer' }
-      ];
+      const items = [ { id: 'Gender', col: 3, title: 'สัดส่วนเพศ', ic: 'fi-sr-venus-mars' } ];
+      
+      // ถ้าเลือกปริญญาตรี หรือ ดูทั้งหมด ถึงจะโชว์กราฟ TCAS
+      if (filterDegree === "ปริญญาตรี" || filterDegree === "All") {
+          items.push({ id: 'Tcas', col: 4, title: 'รอบ TCAS ที่สอบติด', ic: 'fi-sr-bullseye-pointer' });
+      }
+
+      // ปรับ grid ให้พอดีกับจำนวนกราฟที่มี
+      container.className = `grid grid-cols-1 ${items.length > 1 ? 'md:grid-cols-2' : ''} gap-6 mb-8`;
+
       items.forEach(p => {
         const div = document.createElement('div'); div.className = "glass-card p-6 flex flex-col";
         div.innerHTML = `<div class="flex justify-between items-center mb-6"><h3 class="font-bold text-gray-700 flex items-center gap-2"><i class="fi ${p.ic} text-cra-primary"></i> ${p.title}</h3><div class="flex bg-gray-100 rounded-lg p-1 no-print"><button onclick="toggleV('${p.id}','table')" id="btn${p.id}Table" class="px-2 py-1 rounded bg-white shadow text-cra-primary transition"><i class="fi fi-sr-apps-sort"></i></button><button onclick="toggleV('${p.id}','chart')" id="btn${p.id}Chart" class="px-2 py-1 rounded text-gray-400 hover:text-gray-600 transition"><i class="fi fi-sr-chart-pie-alt"></i></button></div></div><div id="v${p.id}Chart" class="h-48 chart-container hidden"><canvas id="c${p.id}"></canvas></div><div id="v${p.id}Table" class="table-container">${renderTableHTML(getCounts(data, p.col), total, p.title)}</div>`;
@@ -457,37 +548,79 @@
         }); 
     }
 
+    /* =========================================
+       ระบบ Filter Modal แบบใหม่ (Custom Dropdown)
+       ========================================= */
     function openFilterModal() {
-      // ดึงรายชื่อหลักสูตรและรอบที่มีอยู่จริงในฐานข้อมูลมาสร้าง Option ตัวกรอง
-      let courses = [...new Set(RAW_DATA.map(r => String(r[0]).trim()))].filter(v => v);
-      let rounds = [...new Set(RAW_DATA.map(r => String(r[4]).trim()))].filter(v => v);
-
       document.getElementById('mHeader').innerHTML = `<i class="fi fi-sr-filter text-cra-primary"></i> กรองข้อมูล Dashboard`;
+      
+      // ดึงรายชื่อรอบ TCAS ทั้งหมดจากฐาน
+      let rounds = [...new Set(RAW_DATA.map(r => String(r[4]).trim()))].filter(v => v && v !== "-");
+
       document.getElementById('mBody').innerHTML = `
         <div class="space-y-6">
             <div>
-                <label class="block font-bold text-gray-700 mb-2">เลือกหลักสูตรที่เข้าศึกษา</label>
-                <select id="selFilterCourse" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cra-primary outline-none font-bold text-gray-600">
-                    <option value="All" ${filterCourse==="All"?'selected':''}>ทุกหลักสูตร</option>
-                    ${courses.map(c => `<option value="${c}" ${filterCourse===c?'selected':''}>${c}</option>`).join('')}
-                </select>
+                <label class="block font-bold text-gray-700 mb-2">ระดับการศึกษา</label>
+                <div id="wrapFilterDegree" class="custom-select-wrapper relative"></div>
+                <input type="hidden" id="valFilterDegree" value="${filterDegree}">
             </div>
             <div>
+                <label class="block font-bold text-gray-700 mb-2">หลักสูตรที่เข้าศึกษา</label>
+                <div id="wrapFilterCourse" class="custom-select-wrapper relative"></div>
+                <input type="hidden" id="valFilterCourse" value="${filterCourse}">
+            </div>
+            <div id="filterTcasSection">
                 <label class="block font-bold text-gray-700 mb-2">รอบ TCAS ที่สอบติด</label>
-                <select id="selFilterRound" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cra-primary outline-none font-bold text-gray-600">
-                    <option value="All" ${filterRound==="All"?'selected':''}>ทุกรอบ</option>
-                    ${rounds.map(r => `<option value="${r}" ${filterRound===r?'selected':''}>${r}</option>`).join('')}
-                </select>
+                <div id="wrapFilterRound" class="custom-select-wrapper relative"></div>
+                <input type="hidden" id="valFilterRound" value="${filterRound}">
             </div>
         </div>
       `;
       document.getElementById('mFooter').innerHTML = `<button onclick="applyFilter()" class="w-full bg-cra-secondary text-white py-3.5 rounded-xl font-bold text-lg shadow-md hover:bg-blue-900 transition">ยืนยันการกรองข้อมูล</button>`;
       document.getElementById('modalBase').classList.remove('hidden');
+
+      // Initialize ระดับการศึกษา Dropdown
+      const degreeOpts = ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"];
+      buildDashSelect('wrapFilterDegree', 'valFilterDegree', degreeOpts, filterDegree, onDegreeFilterChange);
+      
+      // Setup Initial State ของหลักสูตรและ TCAS
+      onDegreeFilterChange(filterDegree, true); 
+      
+      // Initialize TCAS Dropdown
+      buildDashSelect('wrapFilterRound', 'valFilterRound', rounds, filterRound, null);
+    }
+
+    function onDegreeFilterChange(degVal, isInit = false) {
+        // 1. ซ่อน/แสดงรอบ TCAS 
+        const tcasSec = document.getElementById('filterTcasSection');
+        if(degVal === 'ปริญญาโท' || degVal === 'ปริญญาเอก') {
+            tcasSec.classList.add('hidden');
+            document.getElementById('valFilterRound').value = "All"; // Reset
+            let tcasWrap = document.getElementById('wrapFilterRound');
+            if(tcasWrap && tcasWrap.querySelector('.sel-text')) tcasWrap.querySelector('.sel-text').innerText = "ทั้งหมด / ทุกรายการ";
+        } else {
+            tcasSec.classList.remove('hidden');
+        }
+
+        // 2. อัปเดตรายชื่อหลักสูตรให้ตรงกับระดับการศึกษา
+        let courses = [];
+        RAW_DATA.forEach(r => {
+            let d = String(r[16] || "ปริญญาตรี").trim();
+            let c = String(r[0]).trim();
+            if(c && (degVal === "All" || d === degVal) && !courses.includes(c)) courses.push(c);
+        });
+        
+        // หากเป็นการเปลี่ยนระดับการศึกษาใหม่ ให้ Reset ค่า Course เป็น All
+        let currentCrs = isInit ? filterCourse : "All";
+        if(!isInit) document.getElementById('valFilterCourse').value = "All";
+        
+        buildDashSelect('wrapFilterCourse', 'valFilterCourse', courses.sort(), currentCrs, null);
     }
 
     function applyFilter() {
-        filterCourse = document.getElementById('selFilterCourse').value;
-        filterRound = document.getElementById('selFilterRound').value;
+        filterDegree = document.getElementById('valFilterDegree').value;
+        filterCourse = document.getElementById('valFilterCourse').value;
+        filterRound = document.getElementById('valFilterRound').value;
         closeModal();
         renderDashboard();
     }
