@@ -398,7 +398,7 @@
                   </div>
 
                   <div class="p-6 md:p-8 border border-blue-100 bg-[#f0f7ff] rounded-2xl shadow-sm relative z-40">
-                      <label class="block text-base font-bold mb-4 text-[#003380]">ปัจจุบันท่านได้ติดตามประกาศและข่าวสารในเพจราชวิทยาลยจุฬาภรณ์ และ Education CRA หรือไม่ <span class="text-red-500">*</span></label>
+                      <label class="block text-base font-bold mb-4 text-[#003380]">ปัจจุบันท่านได้ติดตามประกาศและข่าวสารในเพจราชวิทยาลัยจุฬาภรณ์ และ Education CRA หรือไม่ <span class="text-red-500">*</span></label>
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <label class="check-card">
                               <div class="checkbox-wrapper-12">
@@ -844,7 +844,7 @@ function submitData(overwrite = false) {
 
     if(!reasons) { Swal.fire({icon:'warning', text:'กรุณาเลือกเหตุผลที่เลือกศึกษาต่ออย่างน้อย 1 ข้อ', confirmButtonColor: '#003380'}); return; }
     if(!channels) { Swal.fire({icon:'warning', text:'กรุณาเลือกช่องทางที่รู้จักอย่างน้อย 1 ข้อ', confirmButtonColor: '#003380'}); return; }
-    if(!followPage) { Swal.fire({icon:'warning', text:'กรุณาระบุว่าติดตามเพจราชวิทยาลยจุฬาภรณ์ และ Education CRA หรือไม่', confirmButtonColor: '#003380'}); return; }
+    if(!followPage) { Swal.fire({icon:'warning', text:'กรุณาระบุว่าติดตามเพจราชวิทยาลัยจุฬาภรณ์ และ Education CRA หรือไม่', confirmButtonColor: '#003380'}); return; }
     if(followPage.value === "ใช่ติดตาม" && !platform) { Swal.fire({icon:'warning', text:'กรุณาเลือกแพลตฟอร์มที่ติดตาม', confirmButtonColor: '#003380'}); return; }
     if(!futureAct) { Swal.fire({icon:'warning', text:'กรุณาระบุกิจกรรมที่อยากให้ราชวิทยาลัยทำการจัดในอนาคต', confirmButtonColor: '#003380'}); return; }
     if(!suggestion) { Swal.fire({icon:'warning', text:'กรุณาระบุข้อเสนอแนะเพิ่มเติม', confirmButtonColor: '#003380'}); return; }
